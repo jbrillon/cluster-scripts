@@ -60,9 +60,9 @@ echo "  subsection large_eddy_simulation">>${filename}
 echo "    set euler_turbulence = false">>${filename}
 echo "    set SGS_model_type = ${SGS_model_type}">>${filename}
 echo "    set turbulent_prandtl_number = 0.6">>${filename}
-echo "    set smagorinsky_model_constant = 0.18">>${filename}
-echo "    set WALE_model_constant = 0.6">>${filename}
-echo "    set vreman_model_constant = 0.081">>${filename}
+echo "    set smagorinsky_model_constant = 0.12">>${filename}
+echo "    set WALE_model_constant = 0.5">>${filename}
+echo "    set vreman_model_constant = 0.036">>${filename}
 echo "    set ratio_of_filter_width_to_cell_size = 1.0">>${filename}
 echo "  end">>${filename}
 echo "end">>${filename}
