@@ -16,9 +16,6 @@ unsteady_data_filename="dofs0${number_of_DOF_per_dimension}_p${poly_degree}"
 
 filename="determine_memory_allocation/input_p5.prm"
 
-# run_name_base="${correction_parameter}_${numerical_flux}_dofs0${number_of_DOF_per_dimension}"
-# run_name="${run_name_base}_viscous_ILES"
-
 source ./create_prm_file.sh ${filename} \
 ${pde_type} \
 ${correction_parameter} \

@@ -1,10 +1,6 @@
 #===================================================
 # INPUTS:
 #---------------------------------------------------
-# pde_type="navier_stokes"
-# SGS_model_type="smagorinsky"
-# correction_parameter="cDG"
-# numerical_flux="central_flux"
 sub_directory=${1}
 pde_type=${2}
 SGS_model_type=${3}
