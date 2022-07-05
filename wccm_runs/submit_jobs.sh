@@ -14,3 +14,5 @@ for j in ${!TARGET_DIR[@]}; do
     sbatch job_prm_file.sh
     cd ../
 done
+
+sacct --format="JobID,JobName%60,NNodes,NCPUS,Timelimit"

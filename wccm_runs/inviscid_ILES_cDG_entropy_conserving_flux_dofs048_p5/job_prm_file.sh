@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --time=60:00:00
+#SBATCH --time=120:00:00
 #SBATCH --account=rrg-nadaraja-ac
 #SBATCH --job-name=inviscid_ILES_cDG_entropy_conserving_flux_dofs048_p5
 #SBATCH --output=%x-%j.out

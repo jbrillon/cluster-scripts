@@ -7,7 +7,7 @@ SGS_model_type=${3}
 correction_parameter=${4}
 numerical_flux=${5}
 #---------------------------------------------------
-cfl_number="0.1"
+cfl_number="0.05"
 poly_degree="5"
 number_of_grid_elements_per_dimension="8"
 density_initial_condition_type="isothermal"
@@ -67,7 +67,7 @@ ${density_initial_condition_type}
 #---------------------------------------------------
 # create job submission file
 #---------------------------------------------------
-time="60:00:00"
+time="120:00:00"
 ntasks_per_node=64
 user_email="julien.brillon@mail.mcgill.ca"
 compute_canada_username="brillon"
