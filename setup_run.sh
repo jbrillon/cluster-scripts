@@ -7,7 +7,7 @@ SGS_model_type=${3}
 correction_parameter=${4}
 numerical_flux=${5}
 #---------------------------------------------------
-cfl_number="0.05"
+cfl_number="0.01"
 poly_degree="5"
 number_of_grid_elements_per_dimension="8"
 density_initial_condition_type="isothermal"

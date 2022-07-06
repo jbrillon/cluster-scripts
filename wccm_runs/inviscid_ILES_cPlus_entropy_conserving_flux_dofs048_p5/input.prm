@@ -58,7 +58,7 @@ subsection flow_solver
   set flow_case_type = taylor_green_vortex
   set poly_degree = 5
   set final_time = 20.0
-  set courant_friedrich_lewy_number = 0.05
+  set courant_friedrich_lewy_number = 0.01
   set adaptive_time_step = true
   set unsteady_data_table_filename = turbulent_quantities
   set output_restart_files = true
