@@ -4,7 +4,7 @@
  
 set dimension = 3
 set run_type = flow_simulation
-set pde_type = euler
+set pde_type = navier_stokes
 set model_type = large_eddy_simulation
 set solution_vtk_files_directory_name = ./solution_files
  

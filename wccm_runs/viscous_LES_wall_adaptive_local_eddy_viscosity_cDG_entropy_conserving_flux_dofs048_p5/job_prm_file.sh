@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --time=120:00:00
 #SBATCH --account=rrg-nadaraja-ac
-#SBATCH --job-name=viscous_LES_smagorinsky_cDG_central_flux_dofs048_p5
+#SBATCH --job-name=viscous_LES_wall_adaptive_local_eddy_viscosity_cDG_entropy_conserving_flux_dofs048_p5
 #SBATCH --output=%x-%j.out
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=64                          ## <-- refer to https://docs.computecanada.ca/wiki/Advanced_MPI_scheduling

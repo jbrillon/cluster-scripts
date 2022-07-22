@@ -4,7 +4,7 @@
  
 set dimension = 3
 set run_type = flow_simulation
-set pde_type = euler
+set pde_type = physics_model
 set model_type = large_eddy_simulation
 set solution_vtk_files_directory_name = ./solution_files
  
@@ -13,7 +13,7 @@ set use_weak_form = false
 set use_collocated_nodes = true
 set use_split_form = true
 set use_classical_FR = false
-set flux_reconstruction = cPlus
+set flux_reconstruction = cDG
 set use_inverse_mass_on_the_fly = true
  
 # numerical fluxes

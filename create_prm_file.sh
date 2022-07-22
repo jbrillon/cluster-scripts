@@ -29,6 +29,7 @@ echo "set use_collocated_nodes = true">>${filename}
 echo "set use_split_form = true">>${filename}
 echo "set use_classical_FR = false">>${filename}
 echo "set flux_reconstruction = ${correction_parameter}">>${filename}
+echo "set use_inverse_mass_on_the_fly = true">>${filename}
 echo " ">>${filename}
 echo "# numerical fluxes">>${filename}
 echo "set conv_num_flux = ${numerical_flux}">>${filename}
@@ -76,7 +77,7 @@ echo "  set final_time = 20.0">>${filename}
 echo "  set courant_friedrich_lewy_number = ${cfl_number}">>${filename}
 echo "  set adaptive_time_step = true">>${filename}
 echo "  set unsteady_data_table_filename = ${unsteady_data_filename}">>${filename}
-echo "  set output_restart_files = true">>${filename}
+echo "  set output_restart_files = false">>${filename}
 echo "  set restart_files_directory_name = restart_files">>${filename}
 echo "  set output_restart_files_every_dt_time_intervals = 1.0">>${filename}
 echo "  subsection grid">>${filename}

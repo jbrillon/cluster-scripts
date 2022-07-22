@@ -7,10 +7,14 @@ SGS_model_type=${3}
 correction_parameter=${4}
 numerical_flux=${5}
 #---------------------------------------------------
-cfl_number="0.01"
+cfl_number="0.1"
+# cfl_number="0.0075"
 poly_degree="5"
+# poly_degree="3"
 number_of_grid_elements_per_dimension="8"
+# number_of_grid_elements_per_dimension="16"
 density_initial_condition_type="isothermal"
+# density_initial_condition_type="uniform"
 let number_of_DOF_per_dimension="(${poly_degree}+1)*${number_of_grid_elements_per_dimension}"
 unsteady_data_filename="turbulent_quantities"
 #===================================================
