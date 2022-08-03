@@ -1,10 +1,7 @@
-JobID                                                             JobName   NNodes      NCPUS  Timelimit 
------------- ------------------------------------------------------------ -------- ---------- ---------- 
-7504358                          viscous_ILES_cDG_central_flux_dofs048_p5        1         64 5-00:00:00 
-7504359                                 viscous_ILES_cDG_l2roe_dofs048_p5        1         64 5-00:00:00 
-7504360                        viscous_ILES_cPlus_central_flux_dofs048_p5        1         64 5-00:00:00 
-7504361               viscous_LES_smagorinsky_cDG_central_flux_dofs048_p5        1         64 5-00:00:00 
-7504362                      viscous_LES_smagorinsky_cDG_l2roe_dofs048_p5        1         64 5-00:00:00 
-7504363                    viscous_LES_smagorinsky_cPlus_l2roe_dofs048_p5        1         64 5-00:00:00 
-7504364              inviscid_ILES_cDG_entropy_conserving_flux_dofs048_p5        1         64 5-00:00:00 
-7504365            inviscid_ILES_cPlus_entropy_conserving_flux_dofs048_p5        1         64 5-00:00:00
+JobID                                                                                      JobName   NNodes      NCPUS  Timelimit 
+------------ ------------------------------------------------------------------------------------- -------- ---------- ----------           
+8096847                                        viscous_ILES_cDG_entropy_conserving_flux_dofs096_p5        8        512 4-00:00:00 
+8096848                                      viscous_ILES_cPlus_entropy_conserving_flux_dofs096_p5        8        512 4-00:00:00 
+8096850                 viscous_ILES_cDG_entropy_conserving_flux_with_l2roe_dissipation_dofs096_p5        8        512 4-00:00:00 
+8096851        viscous_ILES_cDG_entropy_conserving_flux_with_lax_friedrichs_dissipation_dofs096_p5        8        512 4-00:00:00 
+8096852                   viscous_ILES_cDG_entropy_conserving_flux_with_roe_dissipation_dofs096_p5        8        512 4-00:00:00 

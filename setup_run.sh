@@ -8,11 +8,8 @@ correction_parameter=${4}
 numerical_flux=${5}
 #---------------------------------------------------
 cfl_number="0.1"
-# cfl_number="0.0075"
 poly_degree="5"
-# poly_degree="3"
-number_of_grid_elements_per_dimension="8"
-# number_of_grid_elements_per_dimension="16"
+number_of_grid_elements_per_dimension="16"
 density_initial_condition_type="isothermal"
 # density_initial_condition_type="uniform"
 let number_of_DOF_per_dimension="(${poly_degree}+1)*${number_of_grid_elements_per_dimension}"
@@ -71,14 +68,14 @@ ${density_initial_condition_type}
 #---------------------------------------------------
 # create job submission file
 #---------------------------------------------------
-time="120:00:00"
+time="96:00:00"
 ntasks_per_node=64
 user_email="julien.brillon@mail.mcgill.ca"
 compute_canada_username="brillon"
 parameters_file="${prm_filename}"
 PHiLiP_DIM=3
 run_on_temp_dir=false
-nodes=1
+nodes=8
 job_name="${run_name}"
 job_submission_script_filename="job_prm_file.sh"
 filename="${run_directory}/${job_submission_script_filename}"
