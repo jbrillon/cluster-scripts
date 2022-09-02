@@ -8,9 +8,37 @@ cfl_number=${7}
 unsteady_data_filename=${8}
 number_of_grid_elements_per_dimension=${9}
 density_initial_condition_type=${10}
+two_point_flux_type=${11}
+flow_case_type=${12}
+
+# Flow + LES variables
+# -- Default values
+reference_length="1.0"
+prandtl_number="0.71"
+turbulent_prandtl_number="0.6"
+smagorinsky_model_constant="0.12"
+WALE_model_constant="0.5"
+vreman_model_constant="0.036"
+ratio_of_filter_width_to_cell_size="1.0"
+# -- Case specific values
+if [ ${flow_case_type} == "TGV" ]; then
+    flow_case_type_long="taylor_green_vortex"
+    mach_infinity="0.1"
+    reynolds_number_inf="1600.0"
+    final_time="20.0"
+elif [ ${flow_case_type} == "DHIT" ]; then
+    flow_case_type_long="decaying_homogeneous_isotropic_turbulence"
+    mach_infinity="0.2"
+    reynolds_number_inf="500.0"
+    final_time="10.0"
+else 
+    echo "ERROR: Invalid flow_case_type '${flow_case_type}'"
+    exit 0
+fi
+
 echo "Creating ${filename} ..."
 if test -f "${filename}"; then
-	rm ${filename}
+    rm ${filename}
 fi
 touch ${filename}
 echo "# Listing of Parameters">>${filename}
@@ -27,6 +55,7 @@ echo "# DG formulation">>${filename}
 echo "set use_weak_form = false">>${filename}
 echo "set use_collocated_nodes = true">>${filename}
 echo "set use_split_form = true">>${filename}
+echo "set two_point_num_flux_type = ${two_point_flux_type}">>${filename}
 echo "set use_classical_FR = false">>${filename}
 echo "set flux_reconstruction = ${correction_parameter}">>${filename}
 echo "set use_inverse_mass_on_the_fly = true">>${filename}
@@ -47,13 +76,14 @@ echo "end">>${filename}
 echo " ">>${filename}
 echo "# freestream Mach number">>${filename}
 echo "subsection euler">>${filename}
-echo "  set mach_infinity = 0.1">>${filename}
+echo "  set reference_length = ${reference_length}">>${filename}
+echo "  set mach_infinity = ${mach_infinity}">>${filename}
 echo "end">>${filename}
 echo " ">>${filename}
 echo "# freestream Reynolds number and Prandtl number">>${filename}
 echo "subsection navier_stokes">>${filename}
-echo "  set prandtl_number = 0.71">>${filename}
-echo "  set reynolds_number_inf = 1600.0">>${filename}
+echo "  set prandtl_number = ${prandtl_number}">>${filename}
+echo "  set reynolds_number_inf = ${reynolds_number_inf}">>${filename}
 echo "end">>${filename}
 echo " ">>${filename}
 echo "# Physics Model (if pde_type == physics_model)">>${filename}
@@ -61,19 +91,19 @@ echo "subsection physics_model">>${filename}
 echo "  subsection large_eddy_simulation">>${filename}
 echo "    set euler_turbulence = false">>${filename}
 echo "    set SGS_model_type = ${SGS_model_type}">>${filename}
-echo "    set turbulent_prandtl_number = 0.6">>${filename}
-echo "    set smagorinsky_model_constant = 0.12">>${filename}
-echo "    set WALE_model_constant = 0.5">>${filename}
-echo "    set vreman_model_constant = 0.036">>${filename}
-echo "    set ratio_of_filter_width_to_cell_size = 1.0">>${filename}
+echo "    set turbulent_prandtl_number = ${turbulent_prandtl_number}">>${filename}
+echo "    set smagorinsky_model_constant = ${smagorinsky_model_constant}">>${filename}
+echo "    set WALE_model_constant = ${WALE_model_constant}">>${filename}
+echo "    set vreman_model_constant = ${vreman_model_constant}">>${filename}
+echo "    set ratio_of_filter_width_to_cell_size = ${ratio_of_filter_width_to_cell_size}">>${filename}
 echo "  end">>${filename}
 echo "end">>${filename}
 echo " ">>${filename}
 echo "# Flow Solver">>${filename}
 echo "subsection flow_solver">>${filename}
-echo "  set flow_case_type = taylor_green_vortex">>${filename}
+echo "  set flow_case_type = ${flow_case_type_long}">>${filename}
 echo "  set poly_degree = ${poly_degree}">>${filename}
-echo "  set final_time = 20.0">>${filename}
+echo "  set final_time = ${final_time}">>${filename}
 echo "  set courant_friedrich_lewy_number = ${cfl_number}">>${filename}
 echo "  set adaptive_time_step = true">>${filename}
 echo "  set unsteady_data_table_filename = ${unsteady_data_filename}">>${filename}

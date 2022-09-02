@@ -6,6 +6,9 @@ pde_type=${2}
 SGS_model_type=${3}
 correction_parameter=${4}
 numerical_flux=${5}
+two_point_flux_type=${6}
+flow_case_type=${7}
+first_or_last_run=${8}
 #---------------------------------------------------
 cfl_number="0.1"
 poly_degree="5"
@@ -20,33 +23,58 @@ unsteady_data_filename="turbulent_quantities"
 turbulence_simulation_type="X"
 fluid_type="X"
 if [ ${pde_type} == "navier_stokes" ]; then
-	turbulence_simulation_type="ILES"
-	fluid_type="viscous"
+    turbulence_simulation_type="ILES"
+    fluid_type="viscous"
 elif [ ${pde_type} == "physics_model" ]; then
-	turbulence_simulation_type="LES_${SGS_model_type}"
-	fluid_type="viscous"
+    turbulence_simulation_type="LES_${SGS_model_type}"
+    fluid_type="viscous"
 elif [ ${pde_type} == "euler" ]; then
-	turbulence_simulation_type="ILES"
-	fluid_type="inviscid"
+    turbulence_simulation_type="ILES"
+    fluid_type="inviscid"
 else 
-	echo "ERROR: Invalid pde_type"
-	exit 0
+    echo "ERROR: Invalid pde_type"
+    exit 0
 fi
 
 # set the run name
-run_name="${fluid_type}_${turbulence_simulation_type}_${correction_parameter}_${numerical_flux}_dofs0${number_of_DOF_per_dimension}_p${poly_degree}"
+run_name="${fluid_type}_${turbulence_simulation_type}_${correction_parameter}_${two_point_flux_type}_${numerical_flux}_dofs0${number_of_DOF_per_dimension}_p${poly_degree}"
 
 # set target directory
 run_directory="${sub_directory}/${run_name}"
 
 # create directory if it does not exist
 if [ ! -d ${run_directory} ]; then
-	echo "Creating run directory and subdirectories ${run_directory}"
-	mkdir "${run_directory}"
-	# create subdirectories
-	mkdir "${run_directory}/solution_files"
-	mkdir "${run_directory}/restart_files"
+    echo "Creating run directory and subdirectories ${run_directory}"
+    mkdir "${run_directory}"
+    # create subdirectories
+    mkdir "${run_directory}/solution_files"
+    mkdir "${run_directory}/restart_files"
 fi
+
+#---------------------------------------------------
+# create bash file for submitting all jobs
+#---------------------------------------------------
+submit_jobs_filename="submit_jobs.sh"
+filename="${sub_directory}/${submit_jobs_filename}"
+if [ ${first_or_last_run} == "first" ]; then
+    echo "Creating ${filename} ..."
+    if test -f "${filename}"; then
+        rm ${filename}
+    fi
+    echo 'TARGET_DIR=(\'>>${filename}
+    echo "done."
+fi
+echo ${run_name}' \'>>${filename}
+if [ ${first_or_last_run} == "last" ]; then
+echo ')'>>${filename}
+echo ''>>${filename}
+echo 'for j in ${!TARGET_DIR[@]}; do'>>${filename}
+echo '    cd ${TARGET_DIR[$j]}'>>${filename}
+echo '    sbatch job_prm_file.sh'>>${filename}
+echo '    cd ../'>>${filename}
+echo 'done'>>${filename}
+fi
+
 #---------------------------------------------------
 # create prm file
 #---------------------------------------------------
@@ -61,7 +89,9 @@ ${poly_degree} \
 ${cfl_number} \
 ${unsteady_data_filename} \
 ${number_of_grid_elements_per_dimension} \
-${density_initial_condition_type}
+${density_initial_condition_type} \
+${two_point_flux_type} \
+${flow_case_type}
 #---------------------------------------------------
 
 
