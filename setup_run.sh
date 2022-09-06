@@ -9,6 +9,7 @@ numerical_flux=${5}
 two_point_flux_type=${6}
 flow_case_type=${7}
 first_or_last_run=${8}
+test_directory=${9}
 #---------------------------------------------------
 cfl_number="0.1"
 poly_degree="5"
@@ -41,7 +42,6 @@ run_name="${fluid_type}_${turbulence_simulation_type}_${correction_parameter}_${
 
 # set target directory
 run_directory="${sub_directory}/${run_name}"
-
 # create directory if it does not exist
 if [ ! -d ${run_directory} ]; then
     echo "Creating run directory and subdirectories ${run_directory}"
@@ -50,6 +50,21 @@ if [ ! -d ${run_directory} ]; then
     mkdir "${run_directory}/solution_files"
     mkdir "${run_directory}/restart_files"
 fi
+
+#- - - - - - - - - - - - - - - - - - - - - - - - - -
+# FOR TESTING
+#- - - - - - - - - - - - - - - - - - - - - - - - - -
+# set target directory
+run_directory_test="${test_directory}/${run_name}"
+# create directory if it does not exist
+if [ ! -d ${run_directory_test} ]; then
+    echo "Creating run directory and subdirectories ${run_directory_test}"
+    mkdir "${run_directory_test}"
+    # create subdirectories
+    mkdir "${run_directory_test}/solution_files"
+    mkdir "${run_directory_test}/restart_files"
+fi
+#- - - - - - - - - - - - - - - - - - - - - - - - - -
 
 #---------------------------------------------------
 # create bash file for submitting all jobs
@@ -75,6 +90,35 @@ echo '    cd ../'>>${filename}
 echo 'done'>>${filename}
 fi
 
+#- - - - - - - - - - - - - - - - - - - - - - - - - -
+# FOR TESTING
+#- - - - - - - - - - - - - - - - - - - - - - - - - -
+test_jobs_filename="test_jobs.sh"
+filename="${test_directory}/${test_jobs_filename}"
+if [ ${first_or_last_run} == "first" ]; then
+    echo "Creating ${filename} ..."
+    if test -f "${filename}"; then
+        rm ${filename}
+    fi
+    echo 'TARGET_DIR=(\'>>${filename}
+    echo "done."
+fi
+echo ${run_name}' \'>>${filename}
+if [ ${first_or_last_run} == "last" ]; then
+echo ')'>>${filename}
+echo ''>>${filename}
+echo 'for j in ${!TARGET_DIR[@]}; do'>>${filename}
+echo '    echo "================================================="'>>${filename}
+echo '    echo "STARTING: ${TARGET_DIR[$j]}"'>>${filename}
+echo '    echo "================================================="'>>${filename}
+echo '    /usr/bin/mpirun "-np" "4" "/home/julien/Codes/2022-06-15/PHiLiP/build_release/bin/PHiLiP_3D" "-i" "${TARGET_DIR[$j]}/input.prm"'>>${filename}
+echo '    echo "================================================="'>>${filename}
+echo '    echo "COMPLETED: ${TARGET_DIR[$j]}"'>>${filename}
+echo '    echo "================================================="'>>${filename}
+echo 'done'>>${filename}
+fi
+#- - - - - - - - - - - - - - - - - - - - - - - - - -
+
 #---------------------------------------------------
 # create prm file
 #---------------------------------------------------
@@ -89,6 +133,24 @@ ${poly_degree} \
 ${cfl_number} \
 ${unsteady_data_filename} \
 ${number_of_grid_elements_per_dimension} \
+${density_initial_condition_type} \
+${two_point_flux_type} \
+${flow_case_type}
+
+#- - - - - - - - - - - - - - - - - - - - - - - - - -
+# FOR TESTING
+#- - - - - - - - - - - - - - - - - - - - - - - - - -
+prm_filename="input.prm"
+filename="${run_directory_test}/${prm_filename}"
+source ./create_prm_file.sh ${filename} \
+${pde_type} \
+${correction_parameter} \
+${numerical_flux} \
+${SGS_model_type} \
+"2" \
+${cfl_number} \
+${unsteady_data_filename} \
+"4" \
 ${density_initial_condition_type} \
 ${two_point_flux_type} \
 ${flow_case_type}
