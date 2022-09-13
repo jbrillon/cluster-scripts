@@ -81,14 +81,14 @@ if [ ${first_or_last_run} == "first" ]; then
 fi
 echo ${run_name}' \'>>${filename}
 if [ ${first_or_last_run} == "last" ]; then
-echo ')'>>${filename}
-echo ''>>${filename}
-echo 'for j in ${!TARGET_DIR[@]}; do'>>${filename}
-echo '    cd ${TARGET_DIR[$j]}'>>${filename}
-echo '    sbatch job_prm_file.sh'>>${filename}
-echo '    cd ../'>>${filename}
-echo 'done'>>${filename}
-chmod +x ${filename}
+    echo ')'>>${filename}
+    echo ''>>${filename}
+    echo 'for j in ${!TARGET_DIR[@]}; do'>>${filename}
+    echo '    cd ${TARGET_DIR[$j]}'>>${filename}
+    echo '    sbatch job_prm_file.sh'>>${filename}
+    echo '    cd ../'>>${filename}
+    echo 'done'>>${filename}
+    chmod +x ${filename}
 fi
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -106,17 +106,18 @@ if [ ${first_or_last_run} == "first" ]; then
 fi
 echo ${run_name}' \'>>${filename}
 if [ ${first_or_last_run} == "last" ]; then
-echo ')'>>${filename}
-echo ''>>${filename}
-echo 'for j in ${!TARGET_DIR[@]}; do'>>${filename}
-echo '    echo "================================================="'>>${filename}
-echo '    echo "STARTING: ${TARGET_DIR[$j]}"'>>${filename}
-echo '    echo "================================================="'>>${filename}
-echo '    /usr/bin/mpirun "-np" "4" "/home/julien/Codes/2022-06-15/PHiLiP/build_release/bin/PHiLiP_3D" "-i" "${TARGET_DIR[$j]}/input.prm"'>>${filename}
-echo '    echo "================================================="'>>${filename}
-echo '    echo "COMPLETED: ${TARGET_DIR[$j]}"'>>${filename}
-echo '    echo "================================================="'>>${filename}
-echo 'done'>>${filename}
+    echo ')'>>${filename}
+    echo ''>>${filename}
+    echo 'for j in ${!TARGET_DIR[@]}; do'>>${filename}
+    echo '    echo "================================================="'>>${filename}
+    echo '    echo "STARTING: ${TARGET_DIR[$j]}"'>>${filename}
+    echo '    echo "================================================="'>>${filename}
+    echo '    /usr/bin/mpirun "-np" "4" "/home/julien/Codes/2022-06-15/PHiLiP/build_release/bin/PHiLiP_3D" "-i" "${TARGET_DIR[$j]}/input.prm"'>>${filename}
+    echo '    echo "================================================="'>>${filename}
+    echo '    echo "COMPLETED: ${TARGET_DIR[$j]}"'>>${filename}
+    echo '    echo "================================================="'>>${filename}
+    echo 'done'>>${filename}
+    chmod +x ${filename}
 fi
 #- - - - - - - - - - - - - - - - - - - - - - - - - -
 
