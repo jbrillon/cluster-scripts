@@ -8,6 +8,7 @@ username=${7}
 parameters_file=${8}
 dimension_of_problem=${9}
 run_on_temp_dir=${10}
+memory_per_node=${11}
 
 let number_of_processors=${nodes}*${ntasks_per_node}
 
@@ -24,7 +25,7 @@ echo "#SBATCH --job-name=${job_name}">>${filename}
 echo "#SBATCH --output=%x-%j.out">>${filename}
 echo "#SBATCH --nodes=${nodes}">>${filename}
 echo "#SBATCH --ntasks-per-node=${ntasks_per_node}                          ## <-- refer to https://docs.computecanada.ca/wiki/Advanced_MPI_scheduling">>${filename}
-echo "#SBATCH --mem=0                                       ## <-- total shared memory; --mem=0 means to reserve all the available memory on each node assigned to the job">>${filename}
+echo "#SBATCH --mem=${memory_per_node}                                       ## <-- total shared memory; --mem=0 means to reserve all the available memory on each node assigned to the job">>${filename}
 echo "#SBATCH --mail-user=${user_email} ## <-- for receiving job updates via email">>${filename}
 echo "#SBATCH --mail-type=ALL                               ## <-- what kind of updates to receive by email">>${filename}
 echo " ">>${filename}

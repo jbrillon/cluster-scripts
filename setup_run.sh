@@ -88,6 +88,7 @@ echo '    cd ${TARGET_DIR[$j]}'>>${filename}
 echo '    sbatch job_prm_file.sh'>>${filename}
 echo '    cd ../'>>${filename}
 echo 'done'>>${filename}
+chmod +x ${filename}
 fi
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -160,14 +161,15 @@ ${flow_case_type}
 #---------------------------------------------------
 # create job submission file
 #---------------------------------------------------
-time="96:00:00"
-ntasks_per_node=64
+time="167:00:00"
+ntasks_per_node=16
+nodes=32
+memory_per_node="63G"
 user_email="julien.brillon@mail.mcgill.ca"
 compute_canada_username="brillon"
 parameters_file="${prm_filename}"
 PHiLiP_DIM=3
 run_on_temp_dir=false
-nodes=8
 job_name="${run_name}"
 job_submission_script_filename="job_prm_file.sh"
 filename="${run_directory}/${job_submission_script_filename}"
@@ -183,4 +185,5 @@ ${user_email} \
 ${compute_canada_username} \
 ${parameters_file} \
 ${PHiLiP_DIM} \
-${run_on_temp_dir}
+${run_on_temp_dir} \
+${memory_per_node}
