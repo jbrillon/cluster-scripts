@@ -3,10 +3,10 @@ pde_type=${2}
 correction_parameter=${3}
 numerical_flux=${4}
 SGS_model_type=${5}
-poly_degree=${6}
+poly_degree_=${6}
 cfl_number=${7}
 unsteady_data_filename=${8}
-number_of_grid_elements_per_dimension=${9}
+number_of_grid_elements_per_dimension_=${9}
 density_initial_condition_type=${10}
 two_point_flux_type=${11}
 flow_case_type=${12}
@@ -102,7 +102,7 @@ echo " ">>${filename}
 echo "# Flow Solver">>${filename}
 echo "subsection flow_solver">>${filename}
 echo "  set flow_case_type = ${flow_case_type_long}">>${filename}
-echo "  set poly_degree = ${poly_degree}">>${filename}
+echo "  set poly_degree = ${poly_degree_}">>${filename}
 echo "  set final_time = ${final_time}">>${filename}
 echo "  set courant_friedrich_lewy_number = ${cfl_number}">>${filename}
 echo "  set adaptive_time_step = true">>${filename}
@@ -114,7 +114,7 @@ echo "  subsection grid">>${filename}
 echo "    set grid_degree = 1">>${filename}
 echo "    set grid_left_bound = 0.0">>${filename}
 echo "    set grid_right_bound = 6.28318530717958623200">>${filename}
-echo "    set number_of_grid_elements_per_dimension = ${number_of_grid_elements_per_dimension}">>${filename}
+echo "    set number_of_grid_elements_per_dimension = ${number_of_grid_elements_per_dimension_}">>${filename}
 echo "  end">>${filename}
 echo "  subsection taylor_green_vortex">>${filename}
 echo "    set density_initial_condition_type = ${density_initial_condition_type}">>${filename}
