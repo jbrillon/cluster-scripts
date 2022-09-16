@@ -10,15 +10,31 @@ two_point_flux_type=${6}
 flow_case_type=${7}
 first_or_last_run=${8}
 test_directory=${9}
+poly_degree=${10}
+number_of_grid_elements_per_dimension=${11}
+walltime=${12}
+ntasks_per_node=${13}
+nodes=${14}
+memory_per_node=${15}
+#---------------------------------------------------
+let number_of_processors=${nodes}*${ntasks_per_node}
 #---------------------------------------------------
 cfl_number="0.1"
-poly_degree="5"
-number_of_grid_elements_per_dimension="16"
 density_initial_condition_type="isothermal"
 # density_initial_condition_type="uniform"
 let number_of_DOF_per_dimension="(${poly_degree}+1)*${number_of_grid_elements_per_dimension}"
 unsteady_data_filename="turbulent_quantities"
 #===================================================
+
+if [ ! -d ${sub_directory} ]; then
+    echo "Creating directory for runs: ${sub_directory}"
+    mkdir "${sub_directory}"
+fi
+
+if [ ! -d ${test_directory} ]; then
+    echo "Creating directory for local testing of runs: ${test_directory}"
+    mkdir "${test_directory}"
+fi
 
 # determine the simulation description parameters
 turbulence_simulation_type="X"
@@ -38,7 +54,7 @@ else
 fi
 
 # set the run name
-run_name="${fluid_type}_${turbulence_simulation_type}_${correction_parameter}_${two_point_flux_type}_${numerical_flux}_dofs0${number_of_DOF_per_dimension}_p${poly_degree}"
+run_name="${fluid_type}_${turbulence_simulation_type}_${correction_parameter}_${two_point_flux_type}_${numerical_flux}_dofs0${number_of_DOF_per_dimension}_p${poly_degree}_procs${number_of_processors}"
 
 # set target directory
 run_directory="${sub_directory}/${run_name}"
@@ -139,6 +155,32 @@ ${density_initial_condition_type} \
 ${two_point_flux_type} \
 ${flow_case_type}
 
+#---------------------------------------------------
+# create job submission file
+#---------------------------------------------------
+user_email="julien.brillon@mail.mcgill.ca"
+compute_canada_username="brillon"
+parameters_file="${prm_filename}"
+PHiLiP_DIM=3
+run_on_temp_dir=false
+job_name="${run_name}"
+job_submission_script_filename="job_prm_file.sh"
+filename="${run_directory}/${job_submission_script_filename}"
+#---------------------------------------------------
+# Generate job file
+source ./create_job_file.sh \
+${filename} \
+${walltime} \
+${job_name} \
+${nodes} \
+${ntasks_per_node} \
+${user_email} \
+${compute_canada_username} \
+${parameters_file} \
+${PHiLiP_DIM} \
+${run_on_temp_dir} \
+${memory_per_node}
+
 #- - - - - - - - - - - - - - - - - - - - - - - - - -
 # FOR TESTING
 #- - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -157,34 +199,3 @@ ${density_initial_condition_type} \
 ${two_point_flux_type} \
 ${flow_case_type}
 #---------------------------------------------------
-
-
-#---------------------------------------------------
-# create job submission file
-#---------------------------------------------------
-time="167:00:00"
-ntasks_per_node=16
-nodes=32
-memory_per_node="63G"
-user_email="julien.brillon@mail.mcgill.ca"
-compute_canada_username="brillon"
-parameters_file="${prm_filename}"
-PHiLiP_DIM=3
-run_on_temp_dir=false
-job_name="${run_name}"
-job_submission_script_filename="job_prm_file.sh"
-filename="${run_directory}/${job_submission_script_filename}"
-#---------------------------------------------------
-# Generate job file
-source ./create_job_file.sh \
-${filename} \
-${time} \
-${job_name} \
-${nodes} \
-${ntasks_per_node} \
-${user_email} \
-${compute_canada_username} \
-${parameters_file} \
-${PHiLiP_DIM} \
-${run_on_temp_dir} \
-${memory_per_node}
