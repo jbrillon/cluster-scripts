@@ -45,13 +45,13 @@ echo "module load gcc/9.3.0 # not needed?">>${filename}
 echo "module load openmpi/4.0.3 # required">>${filename}
 echo " ">>${filename}
 echo "if [ \${RUN_ON_TMPDIR} = true ]; then">>${filename}
-echo "        cd \${SLURM_TMPDIR};      ">>${filename}
+echo "    cd \${SLURM_TMPDIR};">>${filename}
 echo "fi">>${filename}
 echo "">>${filename}
 echo "mpirun -n \${NUM_PROCS} \"\${PHiLiP_EXECUTABLE}\" -i \"\${SLURM_SUBMIT_DIR}/\${PARAMETERS_FILE}\"">>${filename}
 echo " ">>${filename}
 echo "if [ \${RUN_ON_TMPDIR} = true ]; then">>${filename}
-echo "        # Get output files, exclude subdirectories">>${filename}
-echo "        rsync -axvH --no-g --no-p --exclude='*/' \${SLURM_TMPDIR}/* \${SLURM_SUBMIT_DIR};">>${filename}
+echo "    # Get output files, exclude subdirectories">>${filename}
+echo "    rsync -axvH --no-g --no-p --exclude='*/' \${SLURM_TMPDIR}/* \${SLURM_SUBMIT_DIR};">>${filename}
 echo "fi">>${filename}
 echo "done."

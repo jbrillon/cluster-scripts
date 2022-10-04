@@ -50,6 +50,7 @@ echo "set run_type = flow_simulation">>${filename}
 echo "set pde_type = ${pde_type}">>${filename}
 echo "set model_type = large_eddy_simulation">>${filename}
 echo "set solution_vtk_files_directory_name = ./solution_files">>${filename}
+echo "set output_high_order_grid = false">>${filename}
 echo " ">>${filename}
 echo "# DG formulation">>${filename}
 echo "set use_weak_form = false">>${filename}

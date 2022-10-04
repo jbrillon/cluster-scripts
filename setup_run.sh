@@ -87,7 +87,7 @@ fi
 #---------------------------------------------------
 submit_jobs_filename="submit_jobs.sh"
 filename="${sub_directory}/${submit_jobs_filename}"
-if [ ${first_or_last_run} == "first" ]; then
+if [ ${first_or_last_run} == "first" ] || [ ${first_or_last_run} == "first_and_last" ]; then
     echo "Creating ${filename} ..."
     if test -f "${filename}"; then
         rm ${filename}
@@ -96,7 +96,7 @@ if [ ${first_or_last_run} == "first" ]; then
     echo "done."
 fi
 echo ${run_name}' \'>>${filename}
-if [ ${first_or_last_run} == "last" ]; then
+if [ ${first_or_last_run} == "last" ] || [ ${first_or_last_run} == "first_and_last" ]; then
     echo ')'>>${filename}
     echo ''>>${filename}
     echo 'for j in ${!TARGET_DIR[@]}; do'>>${filename}
@@ -112,7 +112,7 @@ fi
 #- - - - - - - - - - - - - - - - - - - - - - - - - -
 test_jobs_filename="test_jobs.sh"
 filename="${test_directory}/${test_jobs_filename}"
-if [ ${first_or_last_run} == "first" ]; then
+if [ ${first_or_last_run} == "first" ] || [ ${first_or_last_run} == "first_and_last" ]; then
     echo "Creating ${filename} ..."
     if test -f "${filename}"; then
         rm ${filename}
@@ -121,7 +121,7 @@ if [ ${first_or_last_run} == "first" ]; then
     echo "done."
 fi
 echo ${run_name}' \'>>${filename}
-if [ ${first_or_last_run} == "last" ]; then
+if [ ${first_or_last_run} == "last" ] || [ ${first_or_last_run} == "first_and_last" ]; then
     echo ')'>>${filename}
     echo ''>>${filename}
     echo 'for j in ${!TARGET_DIR[@]}; do'>>${filename}
