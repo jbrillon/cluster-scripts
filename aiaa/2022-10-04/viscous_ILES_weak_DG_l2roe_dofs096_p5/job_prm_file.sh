@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --time=167:00:00
 #SBATCH --account=rrg-nadaraja-ac
-#SBATCH --job-name=viscous_ILES_cDG_KG_two_point_flux_with_l2roe_dissipation_dofs096_p5
+#SBATCH --job-name=viscous_ILES_weak_DG_l2roe_dofs096_p5
 #SBATCH --output=%x-%j.out
 #SBATCH --nodes=32
 #SBATCH --ntasks-per-node=16                          ## <-- refer to https://docs.computecanada.ca/wiki/Advanced_MPI_scheduling
