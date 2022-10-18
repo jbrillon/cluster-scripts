@@ -26,11 +26,15 @@ if [ ${flow_case_type} == "TGV" ]; then
     mach_infinity="0.1"
     reynolds_number_inf="1600.0"
     final_time="20.0"
+    grid_left_bound="-3.141592653589793238"
+    grid_right_bound="3.141592653589793238"
 elif [ ${flow_case_type} == "DHIT" ]; then
     flow_case_type_long="decaying_homogeneous_isotropic_turbulence"
     mach_infinity="0.2"
     reynolds_number_inf="500.0"
     final_time="10.0"
+    grid_left_bound="0.0"
+    grid_right_bound="6.283185307179586476"
 else 
     echo "ERROR: Invalid flow_case_type '${flow_case_type}'"
     exit 0
@@ -111,8 +115,8 @@ echo "  set restart_files_directory_name = restart_files">>${filename}
 echo "  set output_restart_files_every_dt_time_intervals = 1.0">>${filename}
 echo "  subsection grid">>${filename}
 echo "    set grid_degree = 1">>${filename}
-echo "    set grid_left_bound = 0.0">>${filename}
-echo "    set grid_right_bound = 6.28318530717958623200">>${filename}
+echo "    set grid_left_bound = ${grid_left_bound}">>${filename}
+echo "    set grid_right_bound = ${grid_right_bound}">>${filename}
 echo "    set number_of_grid_elements_per_dimension = ${number_of_grid_elements_per_dimension_}">>${filename}
 echo "  end">>${filename}
 echo "  subsection taylor_green_vortex">>${filename}
