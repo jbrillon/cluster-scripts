@@ -122,5 +122,6 @@ echo "  end">>${filename}
 echo "  subsection taylor_green_vortex">>${filename}
 echo "    set density_initial_condition_type = ${density_initial_condition_type}">>${filename}
 echo "  end">>${filename}
+echo "  set interpolate_initial_condition = false">>${filename}
 echo "end">>${filename}
 echo "done."
