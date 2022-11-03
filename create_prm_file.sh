@@ -59,13 +59,13 @@ echo "# DG formulation">>${filename}
 echo "set use_weak_form = false">>${filename}
 echo "set use_collocated_nodes = true">>${filename}
 echo "set use_split_form = true">>${filename}
-echo "set two_point_num_flux_type = ${two_point_flux_type}">>${filename}
 echo "set use_classical_FR = false">>${filename}
 echo "set flux_reconstruction = ${correction_parameter}">>${filename}
 echo "set use_inverse_mass_on_the_fly = true">>${filename}
 echo "set use_periodic_bc = true">>${filename}
 echo " ">>${filename}
 echo "# numerical fluxes">>${filename}
+echo "set two_point_num_flux_type = ${two_point_flux_type}">>${filename}
 echo "set conv_num_flux = ${numerical_flux}">>${filename}
 echo "set diss_num_flux = symm_internal_penalty">>${filename}
 echo " ">>${filename}
