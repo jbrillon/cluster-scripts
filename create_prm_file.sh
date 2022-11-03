@@ -74,7 +74,7 @@ echo "subsection ODE solver">>${filename}
 echo "  set ode_output = quiet">>${filename}
 echo "  set ode_solver_type = runge_kutta">>${filename}
 echo "  set output_solution_every_dt_time_intervals = 0.0">>${filename}
-echo "  set runge_kutta_method = rk4_ex">>${filename}
+echo "  set runge_kutta_method = ssprk3_ex">>${filename}
 echo "end">>${filename}
 echo " ">>${filename}
 echo "# freestream Mach number">>${filename}
