@@ -16,6 +16,7 @@ walltime=${12}
 ntasks_per_node=${13}
 nodes=${14}
 memory_per_node=${15}
+run_standard_dg=${16}
 #---------------------------------------------------
 let number_of_processors=${nodes}*${ntasks_per_node}
 #---------------------------------------------------
@@ -53,8 +54,15 @@ else
     exit 0
 fi
 
+# set the scheme name
+if [ ${run_standard_dg} == "true" ]; then
+    scheme_name="std_strong_DG"
+else 
+    scheme_name="${correction_parameter}_${two_point_flux_type}"
+fi
+
 # set the run name
-run_name="${fluid_type}_${turbulence_simulation_type}_${correction_parameter}_${two_point_flux_type}_${numerical_flux}_dofs0${number_of_DOF_per_dimension}_p${poly_degree}_procs${number_of_processors}"
+run_name="${fluid_type}_${flow_case_type}_${turbulence_simulation_type}_${scheme_name}_${numerical_flux}_dofs0${number_of_DOF_per_dimension}_p${poly_degree}_procs${number_of_processors}"
 
 # set target directory
 run_directory="${sub_directory}/${run_name}"
@@ -153,7 +161,8 @@ ${unsteady_data_filename} \
 ${number_of_grid_elements_per_dimension} \
 ${density_initial_condition_type} \
 ${two_point_flux_type} \
-${flow_case_type}
+${flow_case_type} \
+${run_standard_dg}
 
 #---------------------------------------------------
 # create job submission file

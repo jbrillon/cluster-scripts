@@ -10,6 +10,14 @@ number_of_grid_elements_per_dimension_=${9}
 density_initial_condition_type=${10}
 two_point_flux_type=${11}
 flow_case_type=${12}
+run_standard_dg=${13}
+
+# determine if using standard DG or split form
+if [ ${run_standard_dg} == "true" ]; then
+    use_split_form="false"
+else 
+    use_split_form="true"
+fi
 
 # Flow + LES variables
 # -- Default values
@@ -73,7 +81,7 @@ echo " ">>${filename}
 echo "# DG formulation">>${filename}
 echo "set use_weak_form = false">>${filename}
 echo "set use_collocated_nodes = true">>${filename}
-echo "set use_split_form = true">>${filename}
+echo "set use_split_form = ${use_split_form}">>${filename}
 echo "set use_classical_FR = false">>${filename}
 echo "set flux_reconstruction = ${correction_parameter}">>${filename}
 echo "set use_inverse_mass_on_the_fly = true">>${filename}
