@@ -25,16 +25,31 @@ if [ ${flow_case_type} == "TGV" ]; then
     flow_case_type_long="taylor_green_vortex"
     mach_infinity="0.1"
     reynolds_number_inf="1600.0"
-    final_time="20.0"
+    final_time="20.001"
     grid_left_bound="-3.141592653589793238"
     grid_right_bound="3.141592653589793238"
+    apply_initial_condition_method="interpolate_initial_condition_function"
+    # apply_initial_condition_method="project_initial_condition_function"
+    input_flow_setup_filename_prefix="setup"
+    output_velocity_field_at_fixed_times="true"
+    output_velocity_field_times_string="8.0 9.0 "
+    number_of_times_to_output_velocity_field="2"
+    output_velocity_field_at_equidistant_nodes="true"
+    output_vorticity_magnitude_field_in_addition_to_velocity="true"
 elif [ ${flow_case_type} == "DHIT" ]; then
     flow_case_type_long="decaying_homogeneous_isotropic_turbulence"
     mach_infinity="0.2"
     reynolds_number_inf="500.0"
-    final_time="10.0"
+    final_time="2.001"
     grid_left_bound="0.0"
     grid_right_bound="6.283185307179586476"
+    apply_initial_condition_method="read_values_from_file_and_project"
+    input_flow_setup_filename_prefix="setup"
+    output_velocity_field_at_fixed_times="true"
+    output_velocity_field_times_string="0.0 1.0 2.0 "
+    number_of_times_to_output_velocity_field="3"
+    output_velocity_field_at_equidistant_nodes="true"
+    output_vorticity_magnitude_field_in_addition_to_velocity="true"
 else 
     echo "ERROR: Invalid flow_case_type '${flow_case_type}'"
     exit 0
@@ -122,6 +137,14 @@ echo "  end">>${filename}
 echo "  subsection taylor_green_vortex">>${filename}
 echo "    set density_initial_condition_type = ${density_initial_condition_type}">>${filename}
 echo "  end">>${filename}
-echo "  set interpolate_initial_condition = false">>${filename}
+echo "  set apply_initial_condition_method = ${apply_initial_condition_method}">>${filename}
+echo "  set input_flow_setup_filename_prefix = ${input_flow_setup_filename_prefix}">>${filename}
+echo "  subsection output_velocity_field">>${filename}
+echo "    set output_velocity_field_at_fixed_times = ${output_velocity_field_at_fixed_times}">>${filename}
+echo "    set output_velocity_field_times_string = ${output_velocity_field_times_string}">>${filename}
+echo "    set number_of_times_to_output_velocity_field = ${number_of_times_to_output_velocity_field}">>${filename}
+echo "    set output_velocity_field_at_equidistant_nodes = ${output_velocity_field_at_equidistant_nodes}">>${filename}
+echo "    set output_vorticity_magnitude_field_in_addition_to_velocity = ${output_vorticity_magnitude_field_in_addition_to_velocity}">>${filename}
+echo "  end">>${filename}
 echo "end">>${filename}
 echo "done."
