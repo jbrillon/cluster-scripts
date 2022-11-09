@@ -32,8 +32,8 @@ if [ ${flow_case_type} == "TGV" ]; then
     # apply_initial_condition_method="project_initial_condition_function"
     input_flow_setup_filename_prefix="setup"
     output_velocity_field_at_fixed_times="true"
-    output_velocity_field_times_string="8.0 9.0 "
-    number_of_times_to_output_velocity_field="2"
+    output_velocity_field_times_string="8.0 "
+    number_of_times_to_output_velocity_field="1"
     output_velocity_field_at_equidistant_nodes="true"
     output_vorticity_magnitude_field_in_addition_to_velocity="true"
 elif [ ${flow_case_type} == "DHIT" ]; then
