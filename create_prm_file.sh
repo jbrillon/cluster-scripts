@@ -46,8 +46,8 @@ if [ ${flow_case_type} == "TGV" ]; then
     output_vorticity_magnitude_field_in_addition_to_velocity="true"
 elif [ ${flow_case_type} == "DHIT" ]; then
     flow_case_type_long="decaying_homogeneous_isotropic_turbulence"
-    mach_infinity="0.2"
-    reynolds_number_inf="500.0"
+    mach_infinity="0.000820634767928"
+    reynolds_number_inf="1726.211232508223"
     final_time="2.001"
     grid_left_bound="0.0"
     grid_right_bound="6.283185307179586476"
