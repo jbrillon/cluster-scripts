@@ -206,5 +206,6 @@ ${unsteady_data_filename} \
 "4" \
 ${density_initial_condition_type} \
 ${two_point_flux_type} \
-${flow_case_type}
+${flow_case_type} \
+${run_standard_dg}
 #---------------------------------------------------
