@@ -4,13 +4,11 @@ correction_parameter=${3}
 numerical_flux=${4}
 SGS_model_type=${5}
 poly_degree_=${6}
-cfl_number=${7}
-unsteady_data_filename=${8}
-number_of_grid_elements_per_dimension_=${9}
-density_initial_condition_type=${10}
-two_point_flux_type=${11}
-flow_case_type=${12}
-run_standard_dg=${13}
+unsteady_data_filename=${7}
+number_of_grid_elements_per_dimension_=${8}
+two_point_flux_type=${9}
+flow_case_type=${10}
+run_standard_dg=${11}
 
 # determine if using standard DG or split form
 if [ ${run_standard_dg} == "true" ]; then
@@ -21,6 +19,7 @@ fi
 
 # Flow + LES variables
 # -- Default values
+density_initial_condition_type="isothermal"
 reference_length="1.0"
 prandtl_number="0.71"
 turbulent_prandtl_number="0.6"
@@ -31,6 +30,7 @@ ratio_of_filter_width_to_cell_size="1.0"
 # -- Case specific values
 if [ ${flow_case_type} == "TGV" ]; then
     flow_case_type_long="taylor_green_vortex"
+    cfl_number="0.1"
     mach_infinity="0.1"
     reynolds_number_inf="1600.0"
     final_time="20.001"
@@ -46,16 +46,17 @@ if [ ${flow_case_type} == "TGV" ]; then
     output_vorticity_magnitude_field_in_addition_to_velocity="true"
 elif [ ${flow_case_type} == "DHIT" ]; then
     flow_case_type_long="decaying_homogeneous_isotropic_turbulence"
+    cfl_number="0.001"
     mach_infinity="0.000820634767928"
     reynolds_number_inf="1726.211232508223"
     final_time="2.001"
     grid_left_bound="0.0"
     grid_right_bound="6.283185307179586476"
     apply_initial_condition_method="read_values_from_file_and_project"
-    input_flow_setup_filename_prefix="setup"
+    input_flow_setup_filename_prefix="./setup_files/setup"
     output_velocity_field_at_fixed_times="true"
-    output_velocity_field_times_string="0.0 1.0 2.0 "
-    number_of_times_to_output_velocity_field="3"
+    output_velocity_field_times_string="0.0 0.001 1.0 2.0 "
+    number_of_times_to_output_velocity_field="4"
     output_velocity_field_at_equidistant_nodes="true"
     output_vorticity_magnitude_field_in_addition_to_velocity="true"
 else 
@@ -153,6 +154,7 @@ echo "    set output_velocity_field_times_string = ${output_velocity_field_times
 echo "    set number_of_times_to_output_velocity_field = ${number_of_times_to_output_velocity_field}">>${filename}
 echo "    set output_velocity_field_at_equidistant_nodes = ${output_velocity_field_at_equidistant_nodes}">>${filename}
 echo "    set output_vorticity_magnitude_field_in_addition_to_velocity = ${output_vorticity_magnitude_field_in_addition_to_velocity}">>${filename}
+echo "    set output_flow_field_files_directory_name = flow_field_files">>${filename}
 echo "  end">>${filename}
 echo "end">>${filename}
 echo "done."

@@ -20,9 +20,6 @@ run_standard_dg=${16}
 #---------------------------------------------------
 let number_of_processors=${nodes}*${ntasks_per_node}
 #---------------------------------------------------
-cfl_number="0.1"
-density_initial_condition_type="isothermal"
-# density_initial_condition_type="uniform"
 let number_of_DOF_per_dimension="(${poly_degree}+1)*${number_of_grid_elements_per_dimension}"
 unsteady_data_filename="turbulent_quantities"
 #===================================================
@@ -73,6 +70,7 @@ if [ ! -d ${run_directory} ]; then
     # create subdirectories
     mkdir "${run_directory}/solution_files"
     mkdir "${run_directory}/restart_files"
+    mkdir "${run_directory}/flow_field_files"
 fi
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -156,10 +154,8 @@ ${correction_parameter} \
 ${numerical_flux} \
 ${SGS_model_type} \
 ${poly_degree} \
-${cfl_number} \
 ${unsteady_data_filename} \
 ${number_of_grid_elements_per_dimension} \
-${density_initial_condition_type} \
 ${two_point_flux_type} \
 ${flow_case_type} \
 ${run_standard_dg}
@@ -201,10 +197,8 @@ ${correction_parameter} \
 ${numerical_flux} \
 ${SGS_model_type} \
 "2" \
-${cfl_number} \
 ${unsteady_data_filename} \
 "4" \
-${density_initial_condition_type} \
 ${two_point_flux_type} \
 ${flow_case_type} \
 ${run_standard_dg}

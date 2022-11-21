@@ -130,14 +130,25 @@ memory_per_node="63G"
 # source ./setup_run.sh ${sub_directory} "navier_stokes" "smagorinsky" "cDG" "lax_friedrichs" "IR" "DHIT" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true"
 #----------------------------------------------------------------
 # 128^3 DHIT RUNS
-sub_directory="${base_directory}/2022-11-11_DHIT_test_128dofs"
+sub_directory="${base_directory}/2022-11-21_DHIT_128dofs"
 test_directory="${sub_directory}_local_test"
-walltime="23:00:00"
-poly_degree="3"
+walltime="48:00:00"
+poly_degree="5"
 number_of_grid_elements_per_dimension="32"
 nodes=32
 source ./setup_run.sh ${sub_directory} "navier_stokes" "smagorinsky" "cDG" "two_point_flux" "IR" "DHIT" "first_and_last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false"
 # source ./setup_run.sh ${sub_directory} "navier_stokes" "smagorinsky" "cPlus" "two_point_flux" "IR" "DHIT" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false"
 # source ./setup_run.sh ${sub_directory} "navier_stokes" "smagorinsky" "cDG" "lax_friedrichs" "IR" "DHIT" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true"
+#----------------------------------------------------------------
+# 48^3 DHIT RUNS
+sub_directory="${base_directory}/2022-11-21_DHIT_048dofs"
+test_directory="${sub_directory}_local_test"
+walltime="48:00:00"
+poly_degree="5"
+number_of_grid_elements_per_dimension="8"
+nodes=4
+source ./setup_run.sh ${sub_directory} "navier_stokes" "smagorinsky" "cDG" "two_point_flux" "IR" "DHIT" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false"
+source ./setup_run.sh ${sub_directory} "navier_stokes" "smagorinsky" "cPlus" "two_point_flux" "IR" "DHIT" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false"
+source ./setup_run.sh ${sub_directory} "navier_stokes" "smagorinsky" "cDG" "lax_friedrichs" "IR" "DHIT" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true"
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 #================================================================
