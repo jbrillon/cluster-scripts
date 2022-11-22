@@ -133,7 +133,7 @@ memory_per_node="63G"
 sub_directory="${base_directory}/2022-11-21_DHIT_128dofs"
 test_directory="${sub_directory}_local_test"
 walltime="48:00:00"
-poly_degree="5"
+poly_degree="3"
 number_of_grid_elements_per_dimension="32"
 nodes=32
 source ./setup_run.sh ${sub_directory} "navier_stokes" "smagorinsky" "cDG" "two_point_flux" "IR" "DHIT" "first_and_last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false"

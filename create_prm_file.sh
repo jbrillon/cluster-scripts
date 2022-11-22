@@ -20,19 +20,15 @@ fi
 # Flow + LES variables
 # -- Default values
 density_initial_condition_type="isothermal"
-reference_length="1.0"
-prandtl_number="0.71"
-turbulent_prandtl_number="0.6"
-smagorinsky_model_constant="0.12"
-WALE_model_constant="0.5"
-vreman_model_constant="0.036"
-ratio_of_filter_width_to_cell_size="1.0"
+reference_length="1.0" # note: this actually serves no purpose in PHiLiP
 # -- Case specific values
 if [ ${flow_case_type} == "TGV" ]; then
     flow_case_type_long="taylor_green_vortex"
     cfl_number="0.1"
     mach_infinity="0.1"
     reynolds_number_inf="1600.0"
+    prandtl_number="0.71"
+    temperature_inf="273.15"
     final_time="20.001"
     grid_left_bound="-3.141592653589793238"
     grid_right_bound="3.141592653589793238"
@@ -44,21 +40,35 @@ if [ ${flow_case_type} == "TGV" ]; then
     number_of_times_to_output_velocity_field="2"
     output_velocity_field_at_equidistant_nodes="true"
     output_vorticity_magnitude_field_in_addition_to_velocity="true"
+    # LES parameters
+    turbulent_prandtl_number="0.6"
+    smagorinsky_model_constant="0.12"
+    WALE_model_constant="0.5"
+    vreman_model_constant="0.036"
+    ratio_of_filter_width_to_cell_size="1.0"
 elif [ ${flow_case_type} == "DHIT" ]; then
     flow_case_type_long="decaying_homogeneous_isotropic_turbulence"
-    cfl_number="0.001"
-    mach_infinity="0.000820634767928"
-    reynolds_number_inf="1726.211232508223"
+    cfl_number="0.1"
+    mach_infinity="0.0007873837059678"
+    reynolds_number_inf="1618.416650320742"
+    prandtl_number="0.70760"
+    temperature_inf="296.7072674352833"
     final_time="2.001"
     grid_left_bound="0.0"
     grid_right_bound="6.283185307179586476"
     apply_initial_condition_method="read_values_from_file_and_project"
     input_flow_setup_filename_prefix="./setup_files/setup"
     output_velocity_field_at_fixed_times="true"
-    output_velocity_field_times_string="0.0 0.001 1.0 2.0 "
-    number_of_times_to_output_velocity_field="4"
+    output_velocity_field_times_string="0.0 1.0 2.0 "
+    number_of_times_to_output_velocity_field="3"
     output_velocity_field_at_equidistant_nodes="true"
     output_vorticity_magnitude_field_in_addition_to_velocity="true"
+    # LES parameters
+    turbulent_prandtl_number="0.6"
+    smagorinsky_model_constant="0.12"
+    WALE_model_constant="0.5"
+    vreman_model_constant="0.036"
+    ratio_of_filter_width_to_cell_size="1.0"
 else 
     echo "ERROR: Invalid flow_case_type '${flow_case_type}'"
     exit 0
@@ -111,6 +121,7 @@ echo "# freestream Reynolds number and Prandtl number">>${filename}
 echo "subsection navier_stokes">>${filename}
 echo "  set prandtl_number = ${prandtl_number}">>${filename}
 echo "  set reynolds_number_inf = ${reynolds_number_inf}">>${filename}
+echo "  set temperature_inf = ${temperature_inf}">>${filename}
 echo "end">>${filename}
 echo " ">>${filename}
 echo "# Physics Model (if pde_type == physics_model)">>${filename}
