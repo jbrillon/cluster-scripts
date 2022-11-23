@@ -1,9 +1,9 @@
-flow_case_type_=${1}
-poly_degree_=${2}
-number_of_grid_elements_per_dimension_=${3}
-number_of_processors_=${4}
+filename=${1}
+flow_case_type_=${2}
+poly_degree_=${3}
+number_of_grid_elements_per_dimension_=${4}
+number_of_processors_=${5}
 
-filename="parameters_for_assembling_mpi_files.txt"
 echo "Creating ${filename} ..."
 if test -f "${filename}"; then
     rm ${filename}

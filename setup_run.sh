@@ -213,7 +213,9 @@ ${run_standard_dg}
 #---------------------------------------------------
 # Generate file with parameters for assembling mpi
 #---------------------------------------------------
+filename="${run_directory}/parameters_for_assembling_mpi_files.txt"
 source ./create_file_with_parameters_for_assembling_mpi.sh \
+${filename} \
 ${flow_case_type} \
 ${poly_degree} \
 ${number_of_grid_elements_per_dimension} \
