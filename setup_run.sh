@@ -112,6 +112,7 @@ if [ ${first_or_last_run} == "last" ] || [ ${first_or_last_run} == "first_and_la
     echo 'done'>>${filename}
     chmod +x ${filename}
 fi
+#---------------------------------------------------
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - -
 # FOR TESTING
@@ -159,6 +160,7 @@ ${number_of_grid_elements_per_dimension} \
 ${two_point_flux_type} \
 ${flow_case_type} \
 ${run_standard_dg}
+#---------------------------------------------------
 
 #---------------------------------------------------
 # create job submission file
@@ -172,7 +174,10 @@ job_name="${run_name}"
 job_submission_script_filename="job_prm_file.sh"
 filename="${run_directory}/${job_submission_script_filename}"
 #---------------------------------------------------
+
+#---------------------------------------------------
 # Generate job file
+#---------------------------------------------------
 source ./create_job_file.sh \
 ${filename} \
 ${walltime} \
@@ -185,6 +190,7 @@ ${parameters_file} \
 ${PHiLiP_DIM} \
 ${run_on_temp_dir} \
 ${memory_per_node}
+#---------------------------------------------------
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - -
 # FOR TESTING
@@ -202,4 +208,14 @@ ${unsteady_data_filename} \
 ${two_point_flux_type} \
 ${flow_case_type} \
 ${run_standard_dg}
+#---------------------------------------------------
+
+#---------------------------------------------------
+# Generate file with parameters for assembling mpi
+#---------------------------------------------------
+source ./create_file_with_parameters_for_assembling_mpi.sh \
+${flow_case_type} \
+${poly_degree} \
+${number_of_grid_elements_per_dimension} \
+${number_of_processors}
 #---------------------------------------------------
