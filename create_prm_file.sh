@@ -48,7 +48,7 @@ if [ ${flow_case_type} == "TGV" ]; then
     ratio_of_filter_width_to_cell_size="1.0"
 elif [ ${flow_case_type} == "DHIT" ]; then
     flow_case_type_long="decaying_homogeneous_isotropic_turbulence"
-    cfl_number="0.1"
+    cfl_number="0.2"
     mach_infinity="0.0007873837059678"
     reynolds_number_inf="1618.416650320742"
     prandtl_number="0.70760"
@@ -59,8 +59,8 @@ elif [ ${flow_case_type} == "DHIT" ]; then
     apply_initial_condition_method="read_values_from_file_and_project"
     input_flow_setup_filename_prefix="./setup_files/setup"
     output_velocity_field_at_fixed_times="true"
-    output_velocity_field_times_string="0.0 1.0 2.0 "
-    number_of_times_to_output_velocity_field="3"
+    output_velocity_field_times_string="0.0 0.5 0.75 1.0 1.5 2.0 "
+    number_of_times_to_output_velocity_field="6"
     output_velocity_field_at_equidistant_nodes="true"
     output_vorticity_magnitude_field_in_addition_to_velocity="true"
     # LES parameters
