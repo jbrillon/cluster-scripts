@@ -29,20 +29,22 @@ if [ ${flow_case_type} == "TGV" ]; then
     reynolds_number_inf="1600.0"
     prandtl_number="0.71"
     temperature_inf="273.15"
-    final_time="20.001"
+    # final_time="20.001"
+    final_time="10.001"
     grid_left_bound="-3.141592653589793238"
     grid_right_bound="3.141592653589793238"
-    apply_initial_condition_method="interpolate_initial_condition_function"
-    # apply_initial_condition_method="project_initial_condition_function"
+    # apply_initial_condition_method="interpolate_initial_condition_function"
+    apply_initial_condition_method="project_initial_condition_function"
     input_flow_setup_filename_prefix="setup"
     output_velocity_field_at_fixed_times="true"
     output_velocity_field_times_string="8.0 9.0 "
     number_of_times_to_output_velocity_field="2"
     output_velocity_field_at_equidistant_nodes="true"
     output_vorticity_magnitude_field_in_addition_to_velocity="true"
+    output_solution_files_at_velocity_field_output_times="true"
     # LES parameters
     turbulent_prandtl_number="0.6"
-    smagorinsky_model_constant="0.12"
+    smagorinsky_model_constant="0.1"
     WALE_model_constant="0.5"
     vreman_model_constant="0.036"
     ratio_of_filter_width_to_cell_size="1.0"
@@ -63,6 +65,7 @@ elif [ ${flow_case_type} == "DHIT" ]; then
     number_of_times_to_output_velocity_field="6"
     output_velocity_field_at_equidistant_nodes="true"
     output_vorticity_magnitude_field_in_addition_to_velocity="true"
+    output_solution_files_at_velocity_field_output_times="false"
     # LES parameters
     turbulent_prandtl_number="0.6"
     smagorinsky_model_constant="0.12"
@@ -166,6 +169,7 @@ echo "    set number_of_times_to_output_velocity_field = ${number_of_times_to_ou
 echo "    set output_velocity_field_at_equidistant_nodes = ${output_velocity_field_at_equidistant_nodes}">>${filename}
 echo "    set output_vorticity_magnitude_field_in_addition_to_velocity = ${output_vorticity_magnitude_field_in_addition_to_velocity}">>${filename}
 echo "    set output_flow_field_files_directory_name = flow_field_files">>${filename}
+echo "    set output_solution_files_at_velocity_field_output_times = ${output_solution_files_at_velocity_field_output_times}">>${filename}
 echo "  end">>${filename}
 echo "end">>${filename}
 echo "done."
