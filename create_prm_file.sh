@@ -9,6 +9,10 @@ number_of_grid_elements_per_dimension_=${8}
 two_point_flux_type=${9}
 flow_case_type=${10}
 run_standard_dg=${11}
+overintegration=${12}
+flux_nodes_type=${13}
+SGS_model_constant=${14}
+physics_model_type=${15}
 
 # determine if using standard DG or split form
 if [ ${run_standard_dg} == "true" ]; then
@@ -18,12 +22,15 @@ else
 fi
 
 # Flow + LES variables
-# -- Default values
-density_initial_condition_type="isothermal"
+# -- Common values
+smagorinsky_model_constant=${SGS_model_constant} #"0.12" -- DHIT, 0.1 TGV
+WALE_model_constant=${SGS_model_constant} #"0.5"
+vreman_model_constant=${SGS_model_constant} #"0.036"
 reference_length="1.0" # note: this actually serves no purpose in PHiLiP
 # -- Case specific values
 if [ ${flow_case_type} == "TGV" ]; then
     flow_case_type_long="taylor_green_vortex"
+    density_initial_condition_type="isothermal"
     cfl_number="0.1"
     mach_infinity="0.1"
     reynolds_number_inf="1600.0"
@@ -42,11 +49,9 @@ if [ ${flow_case_type} == "TGV" ]; then
     output_velocity_field_at_equidistant_nodes="true"
     output_vorticity_magnitude_field_in_addition_to_velocity="true"
     output_solution_files_at_velocity_field_output_times="true"
+    all_boundaries_are_periodic="true"
     # LES parameters
     turbulent_prandtl_number="0.6"
-    smagorinsky_model_constant="0.1"
-    WALE_model_constant="0.5"
-    vreman_model_constant="0.036"
     ratio_of_filter_width_to_cell_size="1.0"
 elif [ ${flow_case_type} == "DHIT" ]; then
     flow_case_type_long="decaying_homogeneous_isotropic_turbulence"
@@ -66,12 +71,22 @@ elif [ ${flow_case_type} == "DHIT" ]; then
     output_velocity_field_at_equidistant_nodes="true"
     output_vorticity_magnitude_field_in_addition_to_velocity="true"
     output_solution_files_at_velocity_field_output_times="false"
+    all_boundaries_are_periodic="true"
     # LES parameters
     turbulent_prandtl_number="0.6"
-    smagorinsky_model_constant="0.12"
-    WALE_model_constant="0.5"
-    vreman_model_constant="0.036"
     ratio_of_filter_width_to_cell_size="1.0"
+elif [ ${flow_case_type} == "TCF" ]; then
+    flow_case_type_long="channel_flow"
+    channel_friction_velocity_reynolds_number="180"
+    all_boundaries_are_periodic="false"
+    turbulent_channel_number_of_cells_x_direction="42"
+    turbulent_channel_number_of_cells_y_direction="42"
+    turbulent_channel_number_of_cells_z_direction="42"
+    turbulent_channel_mesh_stretching_function_type="carton_de_wiart_et_al"
+    # turbulent_channel_mesh_stretching_function_type="gullbrand"
+    # turbulent_channel_mesh_stretching_function_type="hopw"
+    xvelocity_initial_condition_type="laminar"
+    # xvelocity_initial_condition_type="turbulent"
 else 
     echo "ERROR: Invalid flow_case_type '${flow_case_type}'"
     exit 0
@@ -85,26 +100,36 @@ touch ${filename}
 echo "# Listing of Parameters">>${filename}
 echo "# ---------------------">>${filename}
 echo " ">>${filename}
+echo "# Solver dim and run type">>${filename}
 echo "set dimension = 3">>${filename}
 echo "set run_type = flow_simulation">>${filename}
-echo "set pde_type = ${pde_type}">>${filename}
-echo "set model_type = large_eddy_simulation">>${filename}
-echo "set solution_vtk_files_directory_name = ./solution_files">>${filename}
-echo "set output_high_order_grid = false">>${filename}
 echo " ">>${filename}
-echo "# DG formulation">>${filename}
+echo "# DG related parameters">>${filename}
+echo "set overintegration = ${overintegration}">>${filename}
 echo "set use_weak_form = false">>${filename}
-echo "set use_collocated_nodes = true">>${filename}
+echo "set flux_nodes_type = ${flux_nodes_type}">>${filename}
 echo "set use_split_form = ${use_split_form}">>${filename}
-echo "set use_classical_FR = false">>${filename}
+echo "set use_curvilinear_split_form = false">>${filename}
+echo "set use_weight_adjusted_mass = false">>${filename}
+echo "set all_boundaries_are_periodic = ${all_boundaries_are_periodic}">>${filename}
+echo "set check_same_coords_in_weak_dg = false">>${filename}
 echo "set flux_reconstruction = ${correction_parameter}">>${filename}
+echo "set flux_reconstruction_aux = kDG">>${filename}
 echo "set use_inverse_mass_on_the_fly = true">>${filename}
-echo "set use_periodic_bc = true">>${filename}
+echo " ">>${filename}
+echo "# PDE">>${filename}
+echo "set pde_type = ${pde_type}">>${filename}
+echo "set model_type = ${physics_model_type}">>${filename}
 echo " ">>${filename}
 echo "# numerical fluxes">>${filename}
 echo "set two_point_num_flux_type = ${two_point_flux_type}">>${filename}
 echo "set conv_num_flux = ${numerical_flux}">>${filename}
 echo "set diss_num_flux = symm_internal_penalty">>${filename}
+echo " ">>${filename}
+echo "# additional parameters">>${filename}
+echo "set solution_vtk_files_directory_name = ./solution_files">>${filename}
+echo "set output_high_order_grid = false">>${filename}
+echo "set enable_higher_order_vtk_output = true">>${filename}
 echo " ">>${filename}
 echo "# ODE solver">>${filename}
 echo "subsection ODE solver">>${filename}
@@ -114,17 +139,22 @@ echo "  set output_solution_every_dt_time_intervals = 0.0">>${filename}
 echo "  set runge_kutta_method = ssprk3_ex">>${filename}
 echo "end">>${filename}
 echo " ">>${filename}
-echo "# freestream Mach number">>${filename}
+echo "# Euler; freestream Mach number">>${filename}
 echo "subsection euler">>${filename}
 echo "  set reference_length = ${reference_length}">>${filename}
 echo "  set mach_infinity = ${mach_infinity}">>${filename}
+echo "  set gamma_gas = 1.4">>${filename}
 echo "end">>${filename}
 echo " ">>${filename}
-echo "# freestream Reynolds number and Prandtl number">>${filename}
+echo "# Navier-Stokes; freestream Reynolds number and Prandtl number">>${filename}
 echo "subsection navier_stokes">>${filename}
 echo "  set prandtl_number = ${prandtl_number}">>${filename}
 echo "  set reynolds_number_inf = ${reynolds_number_inf}">>${filename}
 echo "  set temperature_inf = ${temperature_inf}">>${filename}
+echo "  set nondimensionalized_isothermal_wall_temperature = 1.0">>${filename}
+echo "  set thermal_boundary_condition_type = adiabatic">>${filename}
+echo "  set use_constant_viscosity = false">>${filename}
+echo "  set nondimensionalized_constant_viscosity = 1.0">>${filename}
 echo "end">>${filename}
 echo " ">>${filename}
 echo "# Physics Model (if pde_type == physics_model)">>${filename}
@@ -145,9 +175,10 @@ echo "subsection flow_solver">>${filename}
 echo "  set flow_case_type = ${flow_case_type_long}">>${filename}
 echo "  set poly_degree = ${poly_degree_}">>${filename}
 echo "  set final_time = ${final_time}">>${filename}
-echo "  set courant_friedrich_lewy_number = ${cfl_number}">>${filename}
-echo "  set adaptive_time_step = true">>${filename}
+echo "  set courant_friedrichs_lewy_number = ${cfl_number}">>${filename}
 echo "  set unsteady_data_table_filename = ${unsteady_data_filename}">>${filename}
+echo "  set steady_state = false">>${filename}
+echo "  set adaptive_time_step = true">>${filename}
 echo "  set output_restart_files = false">>${filename}
 echo "  set restart_files_directory_name = restart_files">>${filename}
 echo "  set output_restart_files_every_dt_time_intervals = 1.0">>${filename}
@@ -157,9 +188,23 @@ echo "    set grid_left_bound = ${grid_left_bound}">>${filename}
 echo "    set grid_right_bound = ${grid_right_bound}">>${filename}
 echo "    set number_of_grid_elements_per_dimension = ${number_of_grid_elements_per_dimension_}">>${filename}
 echo "  end">>${filename}
-echo "  subsection taylor_green_vortex">>${filename}
-echo "    set density_initial_condition_type = ${density_initial_condition_type}">>${filename}
-echo "  end">>${filename}
+if [ ${flow_case_type} == "TGV" ]; then
+    echo "  subsection taylor_green_vortex">>${filename}
+    echo "    set density_initial_condition_type = ${density_initial_condition_type}">>${filename}
+    echo "  end">>${filename}
+elif [ ${flow_case_type} == "TCF" ]; then
+    echo "  subsection channel_flow">>${filename}
+    echo "    set channel_friction_velocity_reynolds_number = ${channel_friction_velocity_reynolds_number}">>${filename}
+    echo "    set turbulent_channel_number_of_cells_x_direction = ${turbulent_channel_number_of_cells_x_direction}">>${filename}
+    echo "    set turbulent_channel_number_of_cells_y_direction = ${turbulent_channel_number_of_cells_y_direction}">>${filename}
+    echo "    set turbulent_channel_number_of_cells_z_direction = ${turbulent_channel_number_of_cells_z_direction}">>${filename}
+    echo "    set turbulent_channel_mesh_stretching_function_type = ${turbulent_channel_mesh_stretching_function_type}">>${filename}
+    echo "    set xvelocity_initial_condition_type = ${xvelocity_initial_condition_type}">>${filename}
+    echo "  end">>${filename}
+    # add more grid parameters
+else 
+    # do nothing
+fi
 echo "  set apply_initial_condition_method = ${apply_initial_condition_method}">>${filename}
 echo "  set input_flow_setup_filename_prefix = ${input_flow_setup_filename_prefix}">>${filename}
 echo "  subsection output_velocity_field">>${filename}

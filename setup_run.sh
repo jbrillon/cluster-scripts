@@ -3,9 +3,9 @@
 #---------------------------------------------------
 sub_directory=${1}
 pde_type=${2}
-SGS_model_type=${3}
+SGS_model_type_short=${3}
 correction_parameter=${4}
-numerical_flux=${5}
+numerical_flux_short=${5}
 two_point_flux_type=${6}
 flow_case_type=${7}
 first_or_last_run=${8}
@@ -17,6 +17,10 @@ ntasks_per_node=${13}
 nodes=${14}
 memory_per_node=${15}
 run_standard_dg=${16}
+overintegration=${17}
+flux_nodes_type=${18}
+SGS_model_constant=${19}
+physics_model_type=${20}
 #---------------------------------------------------
 let number_of_processors=${nodes}*${ntasks_per_node}
 #---------------------------------------------------
@@ -34,6 +38,40 @@ if [ ! -d ${test_directory} ]; then
     mkdir "${test_directory}"
 fi
 
+# determine SGS model type name from the short name
+SGS_model_type="X"
+if [ ${SGS_model_type_short} == "SMAG" ]; then
+    SGS_model_type="smagorinsky"
+elif [ ${SGS_model_type_short} == "WALE" ]; then
+    SGS_model_type="wall_adaptive_local_eddy_viscosity"
+elif [ ${SGS_model_type_short} == "VRMN" ]; then
+    SGS_model_type="vreman"
+else 
+    echo "ERROR: Invalid SGS_model_type_short"
+    exit 0
+fi
+
+# determine numerical flux name from the short name
+numerical_flux="X"
+if [ ${numerical_flux_short} == "LxF" ]; then
+    numerical_flux="lax_friedrichs"
+elif [ ${numerical_flux_short} == "Roe" ]; then
+    numerical_flux="roe"
+elif [ ${numerical_flux_short} == "L2R" ]; then
+    numerical_flux="l2roe"
+elif [ ${numerical_flux_short} == "2PF" ]; then
+    numerical_flux="two_point_flux"
+elif [ ${numerical_flux_short} == "2PF-LxF" ]; then
+    numerical_flux="two_point_flux_with_lax_friedrichs_dissipation"
+elif [ ${numerical_flux_short} == "2PF-Roe" ]; then
+    numerical_flux="two_point_flux_with_roe_dissipation"
+elif [ ${numerical_flux_short} == "2PF-L2R" ]; then
+    numerical_flux="two_point_flux_with_l2roe_dissipation"
+else 
+    echo "ERROR: Invalid numerical_flux_short"
+    exit 0
+fi
+
 # determine the simulation description parameters
 turbulence_simulation_type="X"
 fluid_type="X"
@@ -41,8 +79,15 @@ if [ ${pde_type} == "navier_stokes" ]; then
     turbulence_simulation_type="ILES"
     fluid_type="viscous"
 elif [ ${pde_type} == "physics_model" ]; then
-    turbulence_simulation_type="LES_${SGS_model_type}"
     fluid_type="viscous"
+    if [ ${physics_model_type} == "navier_stokes_model" ]; then
+        turbulence_simulation_type="ILES"
+    elif [ ${physics_model_type} == "large_eddy_simulation" ]; then
+        turbulence_simulation_type="LES_${SGS_model_type_short}_MC-${SGS_model_constant}"
+    else 
+        echo "ERROR: Invalid physics_model_type"
+        exit 0
+    fi
 elif [ ${pde_type} == "euler" ]; then
     turbulence_simulation_type="ILES"
     fluid_type="inviscid"
@@ -55,11 +100,13 @@ fi
 if [ ${run_standard_dg} == "true" ]; then
     scheme_name="std_strong_DG"
 else 
-    scheme_name="${correction_parameter}_${two_point_flux_type}"
+    scheme_name="NSFR_${correction_parameter}_${two_point_flux_type}"
 fi
+# set the scheme details
+scheme_details="${flux_nodes_type}_OI-${overintegration}"
 
 # set the run name
-run_name="${fluid_type}_${flow_case_type}_${turbulence_simulation_type}_${scheme_name}_${numerical_flux}_dofs0${number_of_DOF_per_dimension}_p${poly_degree}_procs${number_of_processors}"
+run_name="${fluid_type}_${flow_case_type}_${turbulence_simulation_type}_${scheme_name}_${numerical_flux_short}_${scheme_details}_dofs0${number_of_DOF_per_dimension}_p${poly_degree}_procs${number_of_processors}"
 
 # set target directory
 run_directory="${sub_directory}/${run_name}"
@@ -135,7 +182,7 @@ if [ ${first_or_last_run} == "last" ] || [ ${first_or_last_run} == "first_and_la
     echo '    echo "================================================="'>>${filename}
     echo '    echo "STARTING: ${TARGET_DIR[$j]}"'>>${filename}
     echo '    echo "================================================="'>>${filename}
-    echo '    /usr/bin/mpirun "-np" "4" "/home/julien/Codes/2022-06-15/PHiLiP/build_release/bin/PHiLiP_3D" "-i" "${TARGET_DIR[$j]}/input.prm"'>>${filename}
+    echo '    /usr/bin/mpirun "-np" "4" "/home/julien/Codes/2023-02-01/PHiLiP/build_release/bin/PHiLiP_3D" "-i" "${TARGET_DIR[$j]}/input.prm"'>>${filename}
     echo '    echo "================================================="'>>${filename}
     echo '    echo "COMPLETED: ${TARGET_DIR[$j]}"'>>${filename}
     echo '    echo "================================================="'>>${filename}
@@ -159,7 +206,11 @@ ${unsteady_data_filename} \
 ${number_of_grid_elements_per_dimension} \
 ${two_point_flux_type} \
 ${flow_case_type} \
-${run_standard_dg}
+${run_standard_dg} \
+${overintegration} \
+${flux_nodes_type} \
+${SGS_model_constant} \
+${physics_model_type}
 #---------------------------------------------------
 
 #---------------------------------------------------
@@ -207,7 +258,11 @@ ${unsteady_data_filename} \
 "4" \
 ${two_point_flux_type} \
 ${flow_case_type} \
-${run_standard_dg}
+${run_standard_dg} \
+${overintegration} \
+${flux_nodes_type} \
+${SGS_model_constant} \
+${physics_model_type}
 #---------------------------------------------------
 
 #---------------------------------------------------
