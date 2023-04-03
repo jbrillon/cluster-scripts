@@ -48,7 +48,6 @@ if [ ${flow_case_type} == "TGV" ]; then
     number_of_times_to_output_velocity_field="2"
     output_velocity_field_at_equidistant_nodes="true"
     output_vorticity_magnitude_field_in_addition_to_velocity="true"
-    output_solution_files_at_velocity_field_output_times="true"
     all_boundaries_are_periodic="true"
     # LES parameters
     turbulent_prandtl_number="0.6"
@@ -70,7 +69,6 @@ elif [ ${flow_case_type} == "DHIT" ]; then
     number_of_times_to_output_velocity_field="6"
     output_velocity_field_at_equidistant_nodes="true"
     output_vorticity_magnitude_field_in_addition_to_velocity="true"
-    output_solution_files_at_velocity_field_output_times="false"
     all_boundaries_are_periodic="true"
     # LES parameters
     turbulent_prandtl_number="0.6"
@@ -159,8 +157,8 @@ echo "end">>${filename}
 echo " ">>${filename}
 echo "# Physics Model (if pde_type == physics_model)">>${filename}
 echo "subsection physics_model">>${filename}
+echo "  set euler_turbulence = false">>${filename}
 echo "  subsection large_eddy_simulation">>${filename}
-echo "    set euler_turbulence = false">>${filename}
 echo "    set SGS_model_type = ${SGS_model_type}">>${filename}
 echo "    set turbulent_prandtl_number = ${turbulent_prandtl_number}">>${filename}
 echo "    set smagorinsky_model_constant = ${smagorinsky_model_constant}">>${filename}
@@ -211,10 +209,8 @@ echo "  subsection output_velocity_field">>${filename}
 echo "    set output_velocity_field_at_fixed_times = ${output_velocity_field_at_fixed_times}">>${filename}
 echo "    set output_velocity_field_times_string = ${output_velocity_field_times_string}">>${filename}
 echo "    set number_of_times_to_output_velocity_field = ${number_of_times_to_output_velocity_field}">>${filename}
-echo "    set output_velocity_field_at_equidistant_nodes = ${output_velocity_field_at_equidistant_nodes}">>${filename}
 echo "    set output_vorticity_magnitude_field_in_addition_to_velocity = ${output_vorticity_magnitude_field_in_addition_to_velocity}">>${filename}
 echo "    set output_flow_field_files_directory_name = flow_field_files">>${filename}
-echo "    set output_solution_files_at_velocity_field_output_times = ${output_solution_files_at_velocity_field_output_times}">>${filename}
 echo "  end">>${filename}
 echo "end">>${filename}
 echo "done."
