@@ -36,8 +36,8 @@ if [ ${flow_case_type} == "TGV" ]; then
     reynolds_number_inf="1600.0"
     prandtl_number="0.71"
     temperature_inf="273.15"
-    # final_time="20.001"
-    final_time="10.001"
+    final_time="20.001"
+    #final_time="10.001"
     grid_left_bound="-3.141592653589793238"
     grid_right_bound="3.141592653589793238"
     # apply_initial_condition_method="interpolate_initial_condition_function"
@@ -46,12 +46,15 @@ if [ ${flow_case_type} == "TGV" ]; then
     output_velocity_field_at_fixed_times="true"
     output_velocity_field_times_string="8.0 9.0 "
     number_of_times_to_output_velocity_field="2"
-    output_velocity_field_at_equidistant_nodes="true"
     output_vorticity_magnitude_field_in_addition_to_velocity="true"
     all_boundaries_are_periodic="true"
     # LES parameters
     turbulent_prandtl_number="0.6"
     ratio_of_filter_width_to_cell_size="1.0"
+    # solution output
+    output_solution_at_fixed_times="true"
+    output_solution_fixed_times_string="4.0 5.0 8.0 9.0 10.0 12.0 15.0 16.0 20.0 "
+    output_solution_at_exact_fixed_times="true"
 elif [ ${flow_case_type} == "DHIT" ]; then
     flow_case_type_long="decaying_homogeneous_isotropic_turbulence"
     cfl_number="0.2"
@@ -67,12 +70,15 @@ elif [ ${flow_case_type} == "DHIT" ]; then
     output_velocity_field_at_fixed_times="true"
     output_velocity_field_times_string="0.0 0.5 0.75 1.0 1.5 2.0 "
     number_of_times_to_output_velocity_field="6"
-    output_velocity_field_at_equidistant_nodes="true"
     output_vorticity_magnitude_field_in_addition_to_velocity="true"
     all_boundaries_are_periodic="true"
     # LES parameters
     turbulent_prandtl_number="0.6"
     ratio_of_filter_width_to_cell_size="1.0"
+    # solution output
+    output_solution_at_fixed_times="true"
+    output_solution_fixed_times_string="0.0 0.5 0.75 1.0 1.5 2.0 "
+    output_solution_at_exact_fixed_times="true"
 elif [ ${flow_case_type} == "TCF" ]; then
     flow_case_type_long="channel_flow"
     channel_friction_velocity_reynolds_number="180"
@@ -85,6 +91,9 @@ elif [ ${flow_case_type} == "TCF" ]; then
     # turbulent_channel_mesh_stretching_function_type="hopw"
     xvelocity_initial_condition_type="laminar"
     # xvelocity_initial_condition_type="turbulent"
+    output_solution_at_fixed_times="false"
+    output_solution_fixed_times_string=" "
+    output_solution_at_exact_fixed_times="false"
 else 
     echo "ERROR: Invalid flow_case_type '${flow_case_type}'"
     exit 0
@@ -134,6 +143,9 @@ echo "subsection ODE solver">>${filename}
 echo "  set ode_output = quiet">>${filename}
 echo "  set ode_solver_type = runge_kutta">>${filename}
 echo "  set output_solution_every_dt_time_intervals = 0.0">>${filename}
+echo "  set output_solution_at_fixed_times = ${output_solution_at_fixed_times}">>${filename}
+echo "  set output_solution_fixed_times_string = ${output_solution_fixed_times_string}">>${filename}
+echo "  set output_solution_at_exact_fixed_times = ${output_solution_at_exact_fixed_times}">>${filename}
 echo "  set runge_kutta_method = ssprk3_ex">>${filename}
 echo "end">>${filename}
 echo " ">>${filename}
