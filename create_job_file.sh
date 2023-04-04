@@ -9,6 +9,7 @@ parameters_file=${8}
 dimension_of_problem=${9}
 run_on_temp_dir=${10}
 memory_per_node=${11}
+output_filename=${12}
 
 let number_of_processors=${nodes}*${ntasks_per_node}
 
@@ -22,7 +23,7 @@ echo "#!/bin/bash">>${filename}
 echo "#SBATCH --time=${time}">>${filename}
 echo "#SBATCH --account=rrg-nadaraja-ac">>${filename}
 echo "#SBATCH --job-name=${job_name}">>${filename}
-echo "#SBATCH --output=log-%j.out">>${filename}
+echo "#SBATCH --output=${output_filename}">>${filename}
 echo "#SBATCH --nodes=${nodes}">>${filename}
 echo "#SBATCH --ntasks-per-node=${ntasks_per_node}                          ## <-- refer to https://docs.computecanada.ca/wiki/Advanced_MPI_scheduling">>${filename}
 echo "#SBATCH --mem=${memory_per_node}                                       ## <-- total shared memory; --mem=0 means to reserve all the available memory on each node assigned to the job">>${filename}

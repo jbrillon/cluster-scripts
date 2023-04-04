@@ -244,7 +244,8 @@ ${compute_canada_username} \
 ${parameters_file} \
 ${PHiLiP_DIM} \
 ${run_on_temp_dir} \
-${memory_per_node}
+${memory_per_node} \
+"log-%j.out"
 #---------------------------------------------------
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - -

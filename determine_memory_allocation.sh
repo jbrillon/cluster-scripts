@@ -19,11 +19,23 @@ if [ ! -d ${target_directory} ]; then
     mkdir "${target_directory}"
 fi
 
+#---------------------------------------------------
+# create bash file for submitting all jobs
+#---------------------------------------------------
+submit_jobs_filename="${target_directory}/submit_det_mem_alloc_jobs.sh"
+echo "Creating ${submit_jobs_filename} ..."
+if test -f "${submit_jobs_filename}"; then
+    rm ${submit_jobs_filename}
+fi
+echo 'TARGET_DIR=(\'>>${submit_jobs_filename}
+echo "done."
+
 for number_of_nodes in ${NumberOfNodesArray[@]}
 do
 	nodes=${number_of_nodes}
 	job_name="alloc_${number_of_nodes}_nodes"
-	filename="${target_directory}/job_${number_of_nodes}_nodes.sh"
+	job_sub_file_name="job_${number_of_nodes}_nodes.sh"
+	filename="${target_directory}/${job_sub_file_name}"
 	# Generate job file
 	source ./create_job_file.sh \
 	${filename} \
@@ -36,5 +48,15 @@ do
 	${parameters_file} \
 	${PHiLiP_DIM} \
 	${run_on_temp_dir} \
-	${memory_per_node}
+	${memory_per_node} \
+	"%x-%j.out"
+	# add line to bash file that submits all jobs
+	echo ${job_sub_file_name}' \'>>${submit_jobs_filename}
 done
+
+echo ')'>>${submit_jobs_filename}
+echo ''>>${submit_jobs_filename}
+echo 'for j in ${!TARGET_DIR[@]}; do'>>${submit_jobs_filename}
+echo '    sbatch ${TARGET_DIR[$j]}'>>${submit_jobs_filename}
+echo 'done'>>${submit_jobs_filename}
+chmod +x ${submit_jobs_filename}
