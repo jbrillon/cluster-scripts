@@ -39,8 +39,10 @@ source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_F
 # NSFR cDG with IR two-point numerical flux, on GLL flux nodes, n_quad=P+1 (i.e. no over-integration)
 source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GLL" "0.1" "large_eddy_simulation"
 # Standard Strong DG on GL flux nodes with n_quad=2*(P+1)
+walltime="168:00:00"
 source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "Roe" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true" "6" "GL" "0.1" "large_eddy_simulation"
 # Standard Strong DG on GLL flux nodes with n_quad=2*(P+1)
+walltime="168:00:00"
 source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "Roe" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true" "6" "GLL" "0.1" "large_eddy_simulation"
 #----------------------------------------------------------------
 #================================================================
@@ -56,8 +58,10 @@ number_of_grid_elements_per_dimension="16"
 nodes=32
 #----------------------------------------------------------------
 # NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=2*(P+1)
+walltime="168:00:00"
 source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "6" "GL" "0.1" "large_eddy_simulation"
 # NSFR cDG with IR two-point numerical flux, on GLL flux nodes, n_quad=2*(P+1)
+walltime="168:00:00"
 source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "6" "GLL" "0.1" "large_eddy_simulation"
 #----------------------------------------------------------------
 #================================================================
