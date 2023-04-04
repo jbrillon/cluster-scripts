@@ -19,6 +19,11 @@ TP_FLUX_type="IR"
 # SMAG, WALE, VRMN
 # LxF, Roe, L2R, 2PF, 2PF-LxF, 2PF-Roe, 2PF-L2R
 
+if [ ! -d ${base_directory} ]; then
+    echo "Creating base directory for runs: ${base_directory}"
+    mkdir "${base_directory}"
+fi
+
 #================================================================
 # (1A) FLUX NODES TYPE / BASELINE NSFR SCHEME | 96^3 DOFs
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

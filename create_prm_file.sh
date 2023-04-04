@@ -45,7 +45,6 @@ if [ ${flow_case_type} == "TGV" ]; then
     input_flow_setup_filename_prefix="setup"
     output_velocity_field_at_fixed_times="true"
     output_velocity_field_times_string="8.0 9.0 "
-    number_of_times_to_output_velocity_field="2"
     output_vorticity_magnitude_field_in_addition_to_velocity="true"
     all_boundaries_are_periodic="true"
     # LES parameters
@@ -69,7 +68,6 @@ elif [ ${flow_case_type} == "DHIT" ]; then
     input_flow_setup_filename_prefix="./setup_files/setup"
     output_velocity_field_at_fixed_times="true"
     output_velocity_field_times_string="0.0 0.5 0.75 1.0 1.5 2.0 "
-    number_of_times_to_output_velocity_field="6"
     output_vorticity_magnitude_field_in_addition_to_velocity="true"
     all_boundaries_are_periodic="true"
     # LES parameters
@@ -134,7 +132,7 @@ echo "set conv_num_flux = ${numerical_flux}">>${filename}
 echo "set diss_num_flux = symm_internal_penalty">>${filename}
 echo " ">>${filename}
 echo "# additional parameters">>${filename}
-echo "set solution_vtk_files_directory_name = ./solution_files">>${filename}
+echo "set solution_vtk_files_directory_name = solution_files">>${filename}
 echo "set output_high_order_grid = false">>${filename}
 echo "set enable_higher_order_vtk_output = true">>${filename}
 echo " ">>${filename}
@@ -217,7 +215,6 @@ echo "  set input_flow_setup_filename_prefix = ${input_flow_setup_filename_prefi
 echo "  subsection output_velocity_field">>${filename}
 echo "    set output_velocity_field_at_fixed_times = ${output_velocity_field_at_fixed_times}">>${filename}
 echo "    set output_velocity_field_times_string = ${output_velocity_field_times_string}">>${filename}
-echo "    set number_of_times_to_output_velocity_field = ${number_of_times_to_output_velocity_field}">>${filename}
 echo "    set output_vorticity_magnitude_field_in_addition_to_velocity = ${output_vorticity_magnitude_field_in_addition_to_velocity}">>${filename}
 echo "    set output_flow_field_files_directory_name = flow_field_files">>${filename}
 echo "  end">>${filename}

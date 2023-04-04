@@ -132,6 +132,7 @@ if [ ! -d ${run_directory_test} ]; then
     # create subdirectories
     mkdir "${run_directory_test}/solution_files"
     mkdir "${run_directory_test}/restart_files"
+    mkdir "${run_directory_test}/flow_field_files"
 fi
 #- - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -182,7 +183,10 @@ if [ ${first_or_last_run} == "last" ] || [ ${first_or_last_run} == "first_and_la
     echo '    echo "================================================="'>>${filename}
     echo '    echo "STARTING: ${TARGET_DIR[$j]}"'>>${filename}
     echo '    echo "================================================="'>>${filename}
-    echo '    /usr/bin/mpirun "-np" "4" "/home/julien/Codes/2023-02-01/PHiLiP/build_release/bin/PHiLiP_3D" "-i" "${TARGET_DIR[$j]}/input.prm"'>>${filename}
+    echo '    cp /home/julien/Codes/2023-02-01/PHiLiP/build_release/bin/PHiLiP_3D ${TARGET_DIR[$j]}/;'>>${filename}
+    echo '    cd ${TARGET_DIR[$j]};'>>${filename}
+    echo '    /usr/bin/mpirun "-np" "4" PHiLiP_3D "-i" "input.prm"'>>${filename}
+    echo '    cd ../;'>>${filename}
     echo '    echo "================================================="'>>${filename}
     echo '    echo "COMPLETED: ${TARGET_DIR[$j]}"'>>${filename}
     echo '    echo "================================================="'>>${filename}
