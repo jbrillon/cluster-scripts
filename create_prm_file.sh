@@ -211,9 +211,6 @@ elif [ ${flow_case_type} == "TCF" ]; then
     echo "    set turbulent_channel_mesh_stretching_function_type = ${turbulent_channel_mesh_stretching_function_type}">>${filename}
     echo "    set xvelocity_initial_condition_type = ${xvelocity_initial_condition_type}">>${filename}
     echo "  end">>${filename}
-    # add more grid parameters
-else 
-    # do nothing
 fi
 echo "  set apply_initial_condition_method = ${apply_initial_condition_method}">>${filename}
 echo "  set input_flow_setup_filename_prefix = ${input_flow_setup_filename_prefix}">>${filename}
