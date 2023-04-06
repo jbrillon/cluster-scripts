@@ -17,6 +17,10 @@ target_directory="outputs/jcp/verification/determine_allocation"
 if [ ! -d ${target_directory} ]; then
     echo "Creating target directory ${target_directory}"
     mkdir "${target_directory}"
+    # create subdirectories
+    mkdir "${target_directory}/solution_files"
+    mkdir "${target_directory}/restart_files"
+    mkdir "${target_directory}/flow_field_files"
 fi
 
 #---------------------------------------------------
