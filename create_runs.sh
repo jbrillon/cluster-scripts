@@ -24,144 +24,239 @@ if [ ! -d ${base_directory} ]; then
     mkdir "${base_directory}"
 fi
 
+# #================================================================
+# # (1A) FLUX NODES TYPE / BASELINE NSFR SCHEME | 96^3 DOFs
+# #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# sub_directory="${base_directory}/flux_nodes"
+# test_directory="${sub_directory}_local_test"
+# walltime="60:00:00"
+# poly_degree="5"
+# number_of_grid_elements_per_dimension="16"
+# nodes=32
+# #----------------------------------------------------------------
+# # NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=P+1 (i.e. no over-integration)
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation"
+# # NSFR cDG with IR two-point numerical flux, on GLL flux nodes, n_quad=P+1 (i.e. no over-integration)
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GLL" "0.1" "large_eddy_simulation"
+# # Standard Strong DG on GL flux nodes with n_quad=2*(P+1)
+# walltime="168:00:00"
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "Roe" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true" "6" "GL" "0.1" "large_eddy_simulation"
+# # Standard Strong DG on GLL flux nodes with n_quad=2*(P+1)
+# walltime="168:00:00"
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "Roe" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true" "6" "GLL" "0.1" "large_eddy_simulation"
+# #----------------------------------------------------------------
+# #================================================================
+
+# #================================================================
+# # (1B) OVER-INTEGRATION WITH NSFR | 96^3 DOFs
+# #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# sub_directory="${base_directory}/over_integration"
+# test_directory="${sub_directory}_local_test"
+# walltime="60:00:00"
+# poly_degree="5"
+# number_of_grid_elements_per_dimension="16"
+# nodes=32
+# #----------------------------------------------------------------
+# # NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=2*(P+1)
+# walltime="168:00:00"
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "6" "GL" "0.1" "large_eddy_simulation"
+# # NSFR cDG with IR two-point numerical flux, on GLL flux nodes, n_quad=2*(P+1)
+# walltime="168:00:00"
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "6" "GLL" "0.1" "large_eddy_simulation"
+# #----------------------------------------------------------------
+# #================================================================
+
+# #================================================================
+# # (2) SOLVER VERIFICATION SECTION | 256^3 DOFs
+# #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# sub_directory="${base_directory}/verification"
+# test_directory="${sub_directory}_local_test"
+# walltime="168:00:00"
+# poly_degree="3"
+# number_of_grid_elements_per_dimension="64"
+# nodes=256
+# #----------------------------------------------------------------
+# # NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=P+1 (i.e. no over-integration)
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation"
+# # NSFR cDG with IR two-point numerical flux, on GLL flux nodes, n_quad=P+1 (i.e. no over-integration)
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GLL" "0.1" "large_eddy_simulation"
+# # Standard Strong DG on GL flux nodes with n_quad=2*(P+1)
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "Roe" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true" "4" "GL" "0.1" "large_eddy_simulation"
+# # Standard Strong DG on GLL flux nodes with n_quad=2*(P+1)
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "Roe" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true" "4" "GLL" "0.1" "large_eddy_simulation"
+# #----------------------------------------------------------------
+# #================================================================
+
+# #================================================================
+# # (3) LES SUB-GRID SCALE MODELLING | 96^3 DOFs
+# #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# sub_directory="${base_directory}/sgs_model"
+# test_directory="${sub_directory}_local_test"
+# walltime="60:00:00"
+# poly_degree="5"
+# number_of_grid_elements_per_dimension="16"
+# nodes=32
+# #----------------------------------------------------------------
+# # SGS MODEL CONSTANTS TO RUN:
+# # Smagorinsky with C=0.18 (from original Smagorinsky paper, also in the Nicoud Ducros paper -- theoretical value for isotropic turbulence)
+# # Smagorinsky with C=0.10 (from Flad and Gassner)
+# # WALE with C=0.5 (from Nicoud and Ducros isotropic turbulence -- page 10 of the pdf)
+# # Vreman with C=0.081 (from Cs=0.18)
+# #----------------------------------------------------------------
+# # -------- GL FLUX NODES -------- 
+# #----------------------------------------------------------------
+# sub_directory="${base_directory}/sgs_model_GL_flux_nodes"
+# test_directory="${sub_directory}_local_test"
+# # NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=P+1, LES with SMAG model with C=0.18
+# source ./setup_run.sh ${sub_directory} "physics_model" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.18" "large_eddy_simulation"
+# # NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=P+1, LES with SMAG model with C=0.10
+# source ./setup_run.sh ${sub_directory} "physics_model" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation"
+# # NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=P+1, LES with WALE model with C=0.5
+# source ./setup_run.sh ${sub_directory} "physics_model" "WALE" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.50" "large_eddy_simulation"
+# # NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=P+1, LES with VRMN model with C=0.081
+# source ./setup_run.sh ${sub_directory} "physics_model" "VRMN" "cDG" "2PF" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.081" "large_eddy_simulation"
+# #----------------------------------------------------------------
+# # -------- GLL FLUX NODES -------- 
+# #----------------------------------------------------------------
+# sub_directory="${base_directory}/sgs_model_GLL_flux_nodes"
+# test_directory="${sub_directory}_local_test"
+# # NSFR cDG with IR two-point numerical flux, on GLL flux nodes, n_quad=P+1, LES with SMAG model with C=0.18
+# source ./setup_run.sh ${sub_directory} "physics_model" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GLL" "0.18" "large_eddy_simulation"
+# # NSFR cDG with IR two-point numerical flux, on GLL flux nodes, n_quad=P+1, LES with SMAG model with C=0.10
+# source ./setup_run.sh ${sub_directory} "physics_model" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GLL" "0.10" "large_eddy_simulation"
+# # NSFR cDG with IR two-point numerical flux, on GLL flux nodes, n_quad=P+1, LES with WALE model with C=0.5
+# source ./setup_run.sh ${sub_directory} "physics_model" "WALE" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GLL" "0.50" "large_eddy_simulation"
+# # NSFR cDG with IR two-point numerical flux, on GLL flux nodes, n_quad=P+1, LES with VRMN model with C=0.081
+# source ./setup_run.sh ${sub_directory} "physics_model" "VRMN" "cDG" "2PF" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GLL" "0.081" "large_eddy_simulation"
+# #----------------------------------------------------------------
+# #================================================================
+
+# #================================================================
+# # (4) UPWIND DISSIPATION | 96^3 DOFs
+# #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# sub_directory="${base_directory}/upwind_dissipation"
+# test_directory="${sub_directory}_local_test"
+# walltime="60:00:00"
+# poly_degree="5"
+# number_of_grid_elements_per_dimension="16"
+# nodes=32
+# #----------------------------------------------------------------
+# # -------- GL FLUX NODES -------- 
+# #----------------------------------------------------------------
+# sub_directory="${base_directory}/upwind_dissipation_GL_flux_nodes"
+# test_directory="${sub_directory}_local_test"
+# # NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=P+1
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF-LxF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.18" "large_eddy_simulation"
+# # NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=P+1
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF-Roe" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.18" "large_eddy_simulation"
+# # NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=P+1
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF-L2R" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.18" "large_eddy_simulation"
+# #----------------------------------------------------------------
+# # -------- GLL FLUX NODES -------- 
+# #----------------------------------------------------------------
+# sub_directory="${base_directory}/upwind_dissipation_GLL_flux_nodes"
+# test_directory="${sub_directory}_local_test"
+# # NSFR cDG with IR two-point numerical flux, on GLL flux nodes, n_quad=P+1
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF-LxF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GLL" "0.18" "large_eddy_simulation"
+# # NSFR cDG with IR two-point numerical flux, on GLL flux nodes, n_quad=P+1
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF-Roe" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GLL" "0.18" "large_eddy_simulation"
+# # NSFR cDG with IR two-point numerical flux, on GLL flux nodes, n_quad=P+1
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF-L2R" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GLL" "0.18" "large_eddy_simulation"
+# #----------------------------------------------------------------
+# #================================================================
+
+# #================================================================
+# # (3.1) FILTER WIDTH STABILIZATION | 96^3 DOFs
+# #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# sub_directory="${base_directory}/filter_width_stabilization"
+# test_directory="${sub_directory}_local_test"
+# walltime="60:00:00"
+# poly_degree="5"
+# number_of_grid_elements_per_dimension="16"
+# nodes=32
+# #----------------------------------------------------------------
+# # Standard Strong DG on GL flux nodes with n_quad=(P+1), LES with SMAG model with C=0.18 with $\Delta=(V_{cell}^(1/3))/(P+1)$ 
+# walltime="96:00:00"
+# source ./setup_run.sh ${sub_directory} "physics_model" "SMAG" "cDG" "Roe" ${TP_FLUX_type} "TGV" "first_and_last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true" "0" "GL" "0.18" "large_eddy_simulation"
+# #----------------------------------------------------------------
+# #================================================================
+
+# #================================================================
+# # (5) TWO POINT FLUX cDG NSFR | 96^3 DOFs
+# #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# sub_directory="${base_directory}/two_point_flux"
+# test_directory="${sub_directory}_local_test"
+# walltime="60:00:00"
+# poly_degree="5"
+# number_of_grid_elements_per_dimension="16"
+# nodes=32
+# #----------------------------------------------------------------
+# # NSFR cDG with KG two-point numerical flux, on GL flux nodes, n_quad=P+1 (i.e. no over-integration)
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" "KG" "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation"
+# # NSFR cDG with CH two-point numerical flux, on GLL flux nodes, n_quad=P+1 (i.e. no over-integration)
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" "CH" "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation"
+# # NSFR cDG with Ra two-point numerical flux, on GLL flux nodes, n_quad=P+1 (i.e. no over-integration)
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" "Ra" "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation"
+# #----------------------------------------------------------------
+# #================================================================
+
+# #================================================================
+# # (6) CORRECTION PARAMETER | 96^3 DOFs
+# #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# sub_directory="${base_directory}/correction_parameter"
+# test_directory="${sub_directory}_local_test"
+# walltime="60:00:00"
+# poly_degree="5"
+# number_of_grid_elements_per_dimension="16"
+# nodes=32
+# #----------------------------------------------------------------
+# # NSFR c+ with IR two-point numerical flux, on GL flux nodes, n_quad=P+1 (i.e. no over-integration)
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cPlus" "2PF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation"
+# # NSFR cHU with IR two-point numerical flux, on GL flux nodes, n_quad=P+1 (i.e. no over-integration)
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cHU" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation"
+# # NSFR cSD with IR two-point numerical flux, on GL flux nodes, n_quad=P+1 (i.e. no over-integration)
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cSD" "2PF" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation"
+# #----------------------------------------------------------------
+# #================================================================
+
 #================================================================
 # (1A) FLUX NODES TYPE / BASELINE NSFR SCHEME | 96^3 DOFs
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-sub_directory="${base_directory}/flux_nodes"
+sub_directory="${base_directory}/robustness"
 test_directory="${sub_directory}_local_test"
 walltime="60:00:00"
 poly_degree="5"
-number_of_grid_elements_per_dimension="16"
-nodes=32
 #----------------------------------------------------------------
+# ---- 24^3 DOFs ---- 
+walltime="72:00:00"
+poly_degree="5"
+number_of_grid_elements_per_dimension="4"
+nodes=1
 # NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=P+1 (i.e. no over-integration)
 source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation"
-# NSFR cDG with IR two-point numerical flux, on GLL flux nodes, n_quad=P+1 (i.e. no over-integration)
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GLL" "0.1" "large_eddy_simulation"
 # Standard Strong DG on GL flux nodes with n_quad=2*(P+1)
-walltime="168:00:00"
+# walltime="168:00:00"
 source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "Roe" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true" "6" "GL" "0.1" "large_eddy_simulation"
-# Standard Strong DG on GLL flux nodes with n_quad=2*(P+1)
-walltime="168:00:00"
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "Roe" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true" "6" "GLL" "0.1" "large_eddy_simulation"
-#----------------------------------------------------------------
-#================================================================
-
-#================================================================
-# (1B) OVER-INTEGRATION WITH NSFR | 96^3 DOFs
-#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-sub_directory="${base_directory}/over_integration"
-test_directory="${sub_directory}_local_test"
-walltime="60:00:00"
+# ---- 48^3 DOFs ---- 
+walltime="72:00:00"
 poly_degree="5"
-number_of_grid_elements_per_dimension="16"
-nodes=32
-#----------------------------------------------------------------
-# NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=2*(P+1)
-walltime="168:00:00"
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "6" "GL" "0.1" "large_eddy_simulation"
-# NSFR cDG with IR two-point numerical flux, on GLL flux nodes, n_quad=2*(P+1)
-walltime="168:00:00"
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "6" "GLL" "0.1" "large_eddy_simulation"
-#----------------------------------------------------------------
-#================================================================
-
-#================================================================
-# (2) SOLVER VERIFICATION SECTION | 256^3 DOFs
-#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-sub_directory="${base_directory}/verification"
-test_directory="${sub_directory}_local_test"
-walltime="168:00:00"
-poly_degree="3"
-number_of_grid_elements_per_dimension="64"
-nodes=64
-#----------------------------------------------------------------
+number_of_grid_elements_per_dimension="8"
+nodes=4
 # NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=P+1 (i.e. no over-integration)
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation"
-# NSFR cDG with IR two-point numerical flux, on GLL flux nodes, n_quad=P+1 (i.e. no over-integration)
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GLL" "0.1" "large_eddy_simulation"
+source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation"
 # Standard Strong DG on GL flux nodes with n_quad=2*(P+1)
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "Roe" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true" "4" "GL" "0.1" "large_eddy_simulation"
-# Standard Strong DG on GLL flux nodes with n_quad=2*(P+1)
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "Roe" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true" "4" "GLL" "0.1" "large_eddy_simulation"
-#----------------------------------------------------------------
-#================================================================
-
-#================================================================
-# (3) LES SUB-GRID SCALE MODELLING | 96^3 DOFs
-#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-sub_directory="${base_directory}/sgs_model"
-test_directory="${sub_directory}_local_test"
-walltime="60:00:00"
+# walltime="168:00:00"
+source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "Roe" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true" "6" "GL" "0.1" "large_eddy_simulation"
+# ---- 12^3 DOFs ---- 
+walltime="72:00:00"
 poly_degree="5"
-number_of_grid_elements_per_dimension="16"
-nodes=32
-#----------------------------------------------------------------
-# SGS MODEL CONSTANTS TO RUN:
-# Smagorinsky with C=0.18 (from original Smagorinsky paper, also in the Nicoud Ducros paper -- theoretical value for isotropic turbulence)
-# Smagorinsky with C=0.10 (from Flad and Gassner)
-# WALE with C=0.5 (from Nicoud and Ducros isotropic turbulence -- page 10 of the pdf)
-# Vreman with C=0.081 (from Cs=0.18)
-#----------------------------------------------------------------
-# -------- GL FLUX NODES -------- 
-#----------------------------------------------------------------
-sub_directory="${base_directory}/sgs_model_GL_flux_nodes"
-test_directory="${sub_directory}_local_test"
-# NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=P+1, LES with SMAG model with C=0.18
-source ./setup_run.sh ${sub_directory} "physics_model" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.18" "large_eddy_simulation"
-# NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=P+1, LES with SMAG model with C=0.10
-source ./setup_run.sh ${sub_directory} "physics_model" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation"
-# NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=P+1, LES with WALE model with C=0.5
-source ./setup_run.sh ${sub_directory} "physics_model" "WALE" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.50" "large_eddy_simulation"
-# NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=P+1, LES with VRMN model with C=0.081
-source ./setup_run.sh ${sub_directory} "physics_model" "VRMN" "cDG" "2PF" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.081" "large_eddy_simulation"
-#----------------------------------------------------------------
-# -------- GLL FLUX NODES -------- 
-#----------------------------------------------------------------
-sub_directory="${base_directory}/sgs_model_GLL_flux_nodes"
-test_directory="${sub_directory}_local_test"
-# NSFR cDG with IR two-point numerical flux, on GLL flux nodes, n_quad=P+1, LES with SMAG model with C=0.18
-source ./setup_run.sh ${sub_directory} "physics_model" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GLL" "0.18" "large_eddy_simulation"
-# NSFR cDG with IR two-point numerical flux, on GLL flux nodes, n_quad=P+1, LES with SMAG model with C=0.10
-source ./setup_run.sh ${sub_directory} "physics_model" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GLL" "0.10" "large_eddy_simulation"
-# NSFR cDG with IR two-point numerical flux, on GLL flux nodes, n_quad=P+1, LES with WALE model with C=0.5
-source ./setup_run.sh ${sub_directory} "physics_model" "WALE" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GLL" "0.50" "large_eddy_simulation"
-# NSFR cDG with IR two-point numerical flux, on GLL flux nodes, n_quad=P+1, LES with VRMN model with C=0.081
-source ./setup_run.sh ${sub_directory} "physics_model" "VRMN" "cDG" "2PF" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GLL" "0.081" "large_eddy_simulation"
-#----------------------------------------------------------------
-#================================================================
-
-#================================================================
-# (4) UPWIND DISSIPATION | 96^3 DOFs
-#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-sub_directory="${base_directory}/upwind_dissipation"
-test_directory="${sub_directory}_local_test"
-walltime="60:00:00"
-poly_degree="5"
-number_of_grid_elements_per_dimension="16"
-nodes=32
-#----------------------------------------------------------------
-# -------- GL FLUX NODES -------- 
-#----------------------------------------------------------------
-sub_directory="${base_directory}/upwind_dissipation_GL_flux_nodes"
-test_directory="${sub_directory}_local_test"
-# NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=P+1
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF-LxF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.18" "large_eddy_simulation"
-# NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=P+1
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF-Roe" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.18" "large_eddy_simulation"
-# NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=P+1
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF-L2R" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.18" "large_eddy_simulation"
-#----------------------------------------------------------------
-# -------- GLL FLUX NODES -------- 
-#----------------------------------------------------------------
-sub_directory="${base_directory}/upwind_dissipation_GLL_flux_nodes"
-test_directory="${sub_directory}_local_test"
-# NSFR cDG with IR two-point numerical flux, on GLL flux nodes, n_quad=P+1
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF-LxF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GLL" "0.18" "large_eddy_simulation"
-# NSFR cDG with IR two-point numerical flux, on GLL flux nodes, n_quad=P+1
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF-Roe" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GLL" "0.18" "large_eddy_simulation"
-# NSFR cDG with IR two-point numerical flux, on GLL flux nodes, n_quad=P+1
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF-L2R" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GLL" "0.18" "large_eddy_simulation"
+number_of_grid_elements_per_dimension="2"
+nodes=1
+# NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=P+1 (i.e. no over-integration)
+source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation"
+# Standard Strong DG on GL flux nodes with n_quad=2*(P+1)
+# walltime="168:00:00"
+source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "Roe" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true" "6" "GL" "0.1" "large_eddy_simulation"
 #----------------------------------------------------------------
 #================================================================
 
