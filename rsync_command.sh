@@ -9,4 +9,4 @@
 # rsync -a --progress outputs/jcp/upwind_dissipation_GLL_flux_nodes brillon@narval.computecanada.ca:scratch/2023_JCP/
 # rsync -a --progress outputs/jcp/verification brillon@narval.computecanada.ca:scratch/2023_JCP/
 # rsync -a --progress outputs/jcp/filter_width_stabilization brillon@narval.computecanada.ca:scratch/2023_JCP/
-rsync -a --progress outputs/jcp/robustness brillon@narval.computecanada.ca:scratch/2023_JCP/
+rsync -a --progress outputs/jcp/time_step_advantage brillon@narval.computecanada.ca:scratch/2023_JCP/
