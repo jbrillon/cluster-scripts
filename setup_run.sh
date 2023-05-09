@@ -23,6 +23,7 @@ SGS_model_constant=${19}
 physics_model_type=${20}
 cfl_number=${21}
 final_time=${22}
+is_cpu_timing_run=${23}
 #---------------------------------------------------
 let number_of_processors=${nodes}*${ntasks_per_node}
 #---------------------------------------------------
@@ -218,7 +219,8 @@ ${flux_nodes_type} \
 ${SGS_model_constant} \
 ${physics_model_type} \
 ${cfl_number} \
-${final_time}
+${final_time} \
+${is_cpu_timing_run}
 #---------------------------------------------------
 
 #---------------------------------------------------
@@ -273,7 +275,8 @@ ${flux_nodes_type} \
 ${SGS_model_constant} \
 ${physics_model_type} \
 ${cfl_number} \
-${final_time}
+${final_time} \
+${is_cpu_timing_run}
 #---------------------------------------------------
 
 #---------------------------------------------------

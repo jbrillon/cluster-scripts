@@ -28,6 +28,7 @@ smagorinsky_model_constant=${SGS_model_constant} #"0.12" -- DHIT, 0.1 TGV
 WALE_model_constant=${SGS_model_constant} #"0.5"
 vreman_model_constant=${SGS_model_constant} #"0.036"
 reference_length="1.0" # note: this actually serves no purpose in PHiLiP
+constant_time_step="0"
 # -- Case specific values
 if [ ${flow_case_type} == "TGV" ]; then
     flow_case_type_long="taylor_green_vortex"
@@ -44,7 +45,6 @@ if [ ${flow_case_type} == "TGV" ]; then
     # apply_initial_condition_method="interpolate_initial_condition_function"
     apply_initial_condition_method="project_initial_condition_function"
     input_flow_setup_filename_prefix="setup"
-    output_velocity_field_at_fixed_times="true"
     output_velocity_field_times_string="8.0 9.0 "
     output_vorticity_magnitude_field_in_addition_to_velocity="true"
     all_boundaries_are_periodic="true"
@@ -52,9 +52,21 @@ if [ ${flow_case_type} == "TGV" ]; then
     turbulent_prandtl_number="0.6"
     ratio_of_filter_width_to_cell_size="1.0"
     # solution output
-    output_solution_at_fixed_times="true"
     output_solution_fixed_times_string="4.0 5.0 8.0 9.0 10.0 12.0 15.0 16.0 20.0 "
     output_solution_at_exact_fixed_times="true"
+    if [ ${is_cpu_timing_run} == "true" ]; then 
+        output_velocity_field_at_fixed_times="false"
+        output_solution_at_fixed_times="false"
+        adaptive_time_step="false"
+        constant_time_step="0.00001"
+    elif [ ${is_cpu_timing_run} == "false" ]; then 
+        output_velocity_field_at_fixed_times="true"
+        output_solution_at_fixed_times="true"
+        adaptive_time_step="true"
+    else
+        echo "ERROR: Invalid is_cpu_timing_run '${is_cpu_timing_run}'"
+        exit 0
+    fi
 elif [ ${flow_case_type} == "DHIT" ]; then
     flow_case_type_long="decaying_homogeneous_isotropic_turbulence"
     # cfl_number="0.2"
@@ -78,6 +90,7 @@ elif [ ${flow_case_type} == "DHIT" ]; then
     output_solution_at_fixed_times="true"
     output_solution_fixed_times_string="0.0 0.5 0.75 1.0 1.5 2.0 "
     output_solution_at_exact_fixed_times="true"
+    adaptive_time_step="true"
 elif [ ${flow_case_type} == "TCF" ]; then
     flow_case_type_long="channel_flow"
     channel_friction_velocity_reynolds_number="180"
@@ -93,6 +106,7 @@ elif [ ${flow_case_type} == "TCF" ]; then
     output_solution_at_fixed_times="false"
     output_solution_fixed_times_string=" "
     output_solution_at_exact_fixed_times="false"
+    adaptive_time_step="true"
 else 
     echo "ERROR: Invalid flow_case_type '${flow_case_type}'"
     exit 0
@@ -184,10 +198,11 @@ echo "subsection flow_solver">>${filename}
 echo "  set flow_case_type = ${flow_case_type_long}">>${filename}
 echo "  set poly_degree = ${poly_degree_}">>${filename}
 echo "  set final_time = ${final_time}">>${filename}
+echo "  set constant_time_step = ${constant_time_step}">>${filename}
 echo "  set courant_friedrichs_lewy_number = ${cfl_number}">>${filename}
 echo "  set unsteady_data_table_filename = ${unsteady_data_filename}">>${filename}
 echo "  set steady_state = false">>${filename}
-echo "  set adaptive_time_step = true">>${filename}
+echo "  set adaptive_time_step = ${adaptive_time_step}">>${filename}
 echo "  set output_restart_files = false">>${filename}
 echo "  set restart_files_directory_name = restart_files">>${filename}
 echo "  set output_restart_files_every_dt_time_intervals = 1.0">>${filename}
