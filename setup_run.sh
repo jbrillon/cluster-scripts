@@ -21,6 +21,8 @@ overintegration=${17}
 flux_nodes_type=${18}
 SGS_model_constant=${19}
 physics_model_type=${20}
+cfl_number=${21}
+final_time=${22}
 #---------------------------------------------------
 let number_of_processors=${nodes}*${ntasks_per_node}
 #---------------------------------------------------
@@ -106,7 +108,7 @@ fi
 scheme_details="${flux_nodes_type}_OI-${overintegration}"
 
 # set the run name
-run_name="${fluid_type}_${flow_case_type}_${turbulence_simulation_type}_${scheme_name}_${numerical_flux_short}_${scheme_details}_dofs0${number_of_DOF_per_dimension}_p${poly_degree}_procs${number_of_processors}"
+run_name="${fluid_type}_${flow_case_type}_${turbulence_simulation_type}_${scheme_name}_${numerical_flux_short}_${scheme_details}_dofs0${number_of_DOF_per_dimension}_p${poly_degree}_CFL-${cfl_number}_procs${number_of_processors}"
 
 # set target directory
 run_directory="${sub_directory}/${run_name}"
@@ -214,7 +216,9 @@ ${run_standard_dg} \
 ${overintegration} \
 ${flux_nodes_type} \
 ${SGS_model_constant} \
-${physics_model_type}
+${physics_model_type} \
+${cfl_number} \
+${final_time}
 #---------------------------------------------------
 
 #---------------------------------------------------
@@ -267,7 +271,9 @@ ${run_standard_dg} \
 ${overintegration} \
 ${flux_nodes_type} \
 ${SGS_model_constant} \
-${physics_model_type}
+${physics_model_type} \
+${cfl_number} \
+${final_time}
 #---------------------------------------------------
 
 #---------------------------------------------------

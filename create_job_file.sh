@@ -25,8 +25,10 @@ echo "#SBATCH --account=rrg-nadaraja-ac">>${filename}
 echo "#SBATCH --job-name=${job_name}">>${filename}
 echo "#SBATCH --output=${output_filename}">>${filename}
 echo "#SBATCH --nodes=${nodes}">>${filename}
-echo "#SBATCH --ntasks-per-node=${ntasks_per_node}                          ## <-- refer to https://docs.computecanada.ca/wiki/Advanced_MPI_scheduling">>${filename}
-echo "#SBATCH --mem=${memory_per_node}                                       ## <-- total shared memory; --mem=0 means to reserve all the available memory on each node assigned to the job">>${filename}
+echo "##SBATCH --ntasks-per-node=${ntasks_per_node}                          ## <-- refer to https://docs.computecanada.ca/wiki/Advanced_MPI_scheduling">>${filename}
+echo "#SBATCH --ntasks=${number_of_processors}">>${filename}
+echo "##SBATCH --mem=${memory_per_node}                                       ## <-- total shared memory; --mem=0 means to reserve all the available memory on each node assigned to the job">>${filename}
+echo "#SBATCH --mem-per-cpu=3048M">>${filename}
 echo "#SBATCH --mail-user=${user_email} ## <-- for receiving job updates via email">>${filename}
 echo "#SBATCH --mail-type=ALL                               ## <-- what kind of updates to receive by email">>${filename}
 echo " ">>${filename}

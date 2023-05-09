@@ -13,7 +13,8 @@ overintegration=${12}
 flux_nodes_type=${13}
 SGS_model_constant=${14}
 physics_model_type=${15}
-
+cfl_number=${16}
+final_time=${17}
 # determine if using standard DG or split form
 if [ ${run_standard_dg} == "true" ]; then
     use_split_form="false"
@@ -31,12 +32,12 @@ reference_length="1.0" # note: this actually serves no purpose in PHiLiP
 if [ ${flow_case_type} == "TGV" ]; then
     flow_case_type_long="taylor_green_vortex"
     density_initial_condition_type="isothermal"
-    cfl_number="0.1"
+    # cfl_number="0.1"
     mach_infinity="0.1"
     reynolds_number_inf="1600.0"
     prandtl_number="0.71"
     temperature_inf="273.15"
-    final_time="20.001"
+    # final_time="20.001"
     #final_time="10.001"
     grid_left_bound="-3.141592653589793238"
     grid_right_bound="3.141592653589793238"
@@ -56,12 +57,12 @@ if [ ${flow_case_type} == "TGV" ]; then
     output_solution_at_exact_fixed_times="true"
 elif [ ${flow_case_type} == "DHIT" ]; then
     flow_case_type_long="decaying_homogeneous_isotropic_turbulence"
-    cfl_number="0.2"
+    # cfl_number="0.2"
     mach_infinity="0.0007873837059678"
     reynolds_number_inf="1618.416650320742"
     prandtl_number="0.70760"
     temperature_inf="296.7072674352833"
-    final_time="2.001"
+    # final_time="2.001"
     grid_left_bound="0.0"
     grid_right_bound="6.283185307179586476"
     apply_initial_condition_method="read_values_from_file_and_project"
