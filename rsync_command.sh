@@ -10,3 +10,5 @@
 # rsync -a --progress outputs/jcp/verification brillon@narval.computecanada.ca:scratch/2023_JCP/
 # rsync -a --progress outputs/jcp/filter_width_stabilization brillon@narval.computecanada.ca:scratch/2023_JCP/
 rsync -a --progress outputs/jcp/cpu_time_advantage brillon@narval.computecanada.ca:scratch/2023_JCP/
+# rsync -a --progress outputs/jcp/time_step_advantage/* brillon@narval.computecanada.ca:scratch/2023_JCP/time_step_advantage/
+# rsync -a --progress brillon@narval.computecanada.ca:scratch/2023_JCP/cpu_time_advantage/* outputs/jcp/cpu_time_advantage/

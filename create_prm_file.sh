@@ -29,6 +29,7 @@ WALE_model_constant=${SGS_model_constant} #"0.5"
 vreman_model_constant=${SGS_model_constant} #"0.036"
 reference_length="1.0" # note: this actually serves no purpose in PHiLiP
 constant_time_step="0"
+do_compute_unsteady_data_and_write_to_table="true"
 # -- Case specific values
 if [ ${flow_case_type} == "TGV" ]; then
     flow_case_type_long="taylor_green_vortex"
@@ -59,6 +60,7 @@ if [ ${flow_case_type} == "TGV" ]; then
         output_solution_at_fixed_times="false"
         adaptive_time_step="false"
         constant_time_step="0.00001"
+        do_compute_unsteady_data_and_write_to_table="false"
     elif [ ${is_cpu_timing_run} == "false" ]; then 
         output_velocity_field_at_fixed_times="true"
         output_solution_at_fixed_times="true"
@@ -234,5 +236,6 @@ echo "    set output_velocity_field_times_string = ${output_velocity_field_times
 echo "    set output_vorticity_magnitude_field_in_addition_to_velocity = ${output_vorticity_magnitude_field_in_addition_to_velocity}">>${filename}
 echo "    set output_flow_field_files_directory_name = flow_field_files">>${filename}
 echo "  end">>${filename}
+echo "  set do_compute_unsteady_data_and_write_to_table = ${do_compute_unsteady_data_and_write_to_table}">>${filename}
 echo "end">>${filename}
 echo "done."
