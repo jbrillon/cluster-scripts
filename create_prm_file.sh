@@ -152,6 +152,8 @@ echo "# additional parameters">>${filename}
 echo "set solution_vtk_files_directory_name = solution_files">>${filename}
 echo "set output_high_order_grid = false">>${filename}
 echo "set enable_higher_order_vtk_output = true">>${filename}
+echo "set do_renumber_dofs = false">>${filename}
+echo "set renumber_dof_handler_Cuthill_Mckee = false">>${filename}
 echo " ">>${filename}
 echo "# ODE solver">>${filename}
 echo "subsection ODE solver">>${filename}

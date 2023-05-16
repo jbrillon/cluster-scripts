@@ -320,7 +320,7 @@ fi
 #================================================================
 # (?) cDG vs strong DG cpu time comparison
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-sub_directory="${base_directory}/cpu_time_advantage"
+sub_directory="${base_directory}/cpu_time_advantage/with_overint_comp_cost"
 test_directory="${sub_directory}_local_test"
 walltime="1:00:00"
 number_of_grid_elements_per_dimension="4"

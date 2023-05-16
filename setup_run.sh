@@ -186,9 +186,9 @@ if [ ${first_or_last_run} == "last" ] || [ ${first_or_last_run} == "first_and_la
     echo '    echo "================================================="'>>${filename}
     echo '    echo "STARTING: ${TARGET_DIR[$j]}"'>>${filename}
     echo '    echo "================================================="'>>${filename}
-    echo '    cp /home/julien/Codes/2023-02-15/PHiLiP/build_release/bin/PHiLiP_3D ${TARGET_DIR[$j]}/;'>>${filename}
+    echo '    cp /home/julien/Codes/2023-02-01/PHiLiP/build_release/bin/PHiLiP_3D ${TARGET_DIR[$j]}/;'>>${filename}
     echo '    cd ${TARGET_DIR[$j]};'>>${filename}
-    echo '    /usr/bin/mpirun "-np" "4" PHiLiP_3D "-i" "input.prm"'>>${filename}
+    echo '    /usr/bin/mpirun "-np" "8" PHiLiP_3D "-i" "input.prm"'>>${filename}
     echo '    cd ../;'>>${filename}
     echo '    echo "================================================="'>>${filename}
     echo '    echo "COMPLETED: ${TARGET_DIR[$j]}"'>>${filename}
@@ -259,14 +259,16 @@ ${memory_per_node} \
 #- - - - - - - - - - - - - - - - - - - - - - - - - -
 prm_filename="input.prm"
 filename="${run_directory_test}/${prm_filename}"
+poly_degree_for_testing=${poly_degree}
+number_of_grid_elements_per_dimension_for_testing=${number_of_grid_elements_per_dimension}
 source ./create_prm_file.sh ${filename} \
 ${pde_type} \
 ${correction_parameter} \
 ${numerical_flux} \
 ${SGS_model_type} \
-"2" \
+${poly_degree_for_testing} \
 ${unsteady_data_filename} \
-"4" \
+${number_of_grid_elements_per_dimension_for_testing} \
 ${two_point_flux_type} \
 ${flow_case_type} \
 ${run_standard_dg} \
