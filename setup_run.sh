@@ -196,7 +196,6 @@ if [ ${first_or_last_run} == "last" ] || [ ${first_or_last_run} == "first_and_la
     echo 'done'>>${filename}
     chmod +x ${filename}
 fi
-#- - - - - - - - - - - - - - - - - - - - - - - - - -
 
 #---------------------------------------------------
 # create prm file
@@ -252,6 +251,87 @@ ${PHiLiP_DIM} \
 ${run_on_temp_dir} \
 ${memory_per_node} \
 "log-%j.out"
+#---------------------------------------------------
+
+#---------------------------------------------------
+# JOB FILE FOR CPU TIMING RUN
+#---------------------------------------------------
+if [ ${is_cpu_timing_run} == "true" ]; then
+    submit_cpu_job_filename="job_cpu_timing_runs.sh"
+    filename="${sub_directory}/${submit_cpu_job_filename}"
+    if [ ${first_or_last_run} == "first" ] || [ ${first_or_last_run} == "first_and_last" ]; then
+        echo "Creating ${filename} ..."
+        if test -f "${filename}"; then
+            rm ${filename}
+        fi
+
+        time=${walltime}
+        username=${compute_canada_username}
+        dimension_of_problem=${PHiLiP_DIM}
+        output_filename="log-%j.out"
+
+        let number_of_processors=${nodes}*${ntasks_per_node}
+
+        echo "#!/bin/bash">>${filename}
+        echo "#SBATCH --time=${time}">>${filename}
+        echo "#SBATCH --account=rrg-nadaraja-ac">>${filename}
+        echo "#SBATCH --job-name=${fluid_type}_${flow_case_type}_cpu_timing">>${filename}
+        echo "#SBATCH --output=${output_filename}">>${filename}
+        echo "#SBATCH --nodes=${nodes}">>${filename}
+        echo "##SBATCH --ntasks-per-node=${ntasks_per_node}                          ## <-- refer to https://docs.computecanada.ca/wiki/Advanced_MPI_scheduling">>${filename}
+        echo "#SBATCH --ntasks=${number_of_processors}">>${filename}
+        echo "##SBATCH --mem=${memory_per_node}                                       ## <-- total shared memory; --mem=0 means to reserve all the available memory on each node assigned to the job">>${filename}
+        echo "#SBATCH --mem-per-cpu=3048M">>${filename}
+        echo "#SBATCH --mail-user=${user_email} ## <-- for receiving job updates via email">>${filename}
+        echo "#SBATCH --mail-type=ALL                               ## <-- what kind of updates to receive by email">>${filename}
+        echo " ">>${filename}
+        echo "SLURM_USER=\"${username}\"                    ## <-- Enter compute canada username here">>${filename}
+        echo "PARAMETERS_FILE=\"${parameters_file}\" ## <-- Enter .prm filename here">>${filename}
+        echo "PHiLiP_DIMENSIONS=\"${dimension_of_problem}\"                    ## WARNING: must correspond to the DIM in the .prm file">>${filename}
+        echo "NUM_PROCS=\"${number_of_processors}\"                           ## WARNING: must correspond to nodes*(ntasks-per-node) above">>${filename}
+        echo "RUN_ON_TMPDIR=${run_on_temp_dir}                      ## Set as true for fast write speeds, however, output files will only be copied to your job submit directory once mpirun has completed.">>${filename}
+        echo " ">>${filename}
+        echo "PHiLiP_EXECUTABLE=\"/home/\${SLURM_USER}/scratch/PHiLiP_\${PHiLiP_DIMENSIONS}D_timer2_AC\"">>${filename}
+        echo " ">>${filename}
+        echo "## Below are the modules needed to run the executable">>${filename}
+        echo "module --force purge # not needed?">>${filename}
+        echo "module load StdEnv/2020 # not needed?">>${filename}
+        echo "##module load intel/2020.1.217">>${filename}
+        echo "module load gcc/9.3.0 # not needed?">>${filename}
+        echo "module load openmpi/4.0.3 # required">>${filename}
+        echo " ">>${filename}
+        echo "if [ \${RUN_ON_TMPDIR} = true ]; then">>${filename}
+        echo "    cd \${SLURM_TMPDIR};">>${filename}
+        echo "fi">>${filename}
+        echo "">>${filename}
+
+        echo 'TARGET_DIR=(\'>>${filename}
+        echo "done."
+    fi
+    echo ${run_name}' \'>>${filename}
+    if [ ${first_or_last_run} == "last" ] || [ ${first_or_last_run} == "first_and_last" ]; then
+        echo ')'>>${filename}
+        echo ''>>${filename}
+        echo 'for j in ${!TARGET_DIR[@]}; do'>>${filename}
+        echo '    echo "================================================="'>>${filename}
+        echo '    echo "STARTING: ${TARGET_DIR[$j]}"'>>${filename}
+        echo '    echo "================================================="'>>${filename}
+        echo '    cd ${TARGET_DIR[$j]};'>>${filename}
+        echo "    mpirun -n \${NUM_PROCS} \"\${PHiLiP_EXECUTABLE}\" -i \"\${SLURM_SUBMIT_DIR}/\${TARGET_DIR[\$j]}/\${PARAMETERS_FILE}\"">>${filename}
+        echo '    cd ../;'>>${filename}
+        echo '    echo "================================================="'>>${filename}
+        echo '    echo "COMPLETED: ${TARGET_DIR[$j]}"'>>${filename}
+        echo '    echo "================================================="'>>${filename}
+        echo 'done'>>${filename}
+        echo " ">>${filename}
+        echo "if [ \${RUN_ON_TMPDIR} = true ]; then">>${filename}
+        echo "    # Get output files, exclude subdirectories">>${filename}
+        echo "    rsync -axvH --no-g --no-p --exclude='*/' \${SLURM_TMPDIR}/* \${SLURM_SUBMIT_DIR};">>${filename}
+        echo "fi">>${filename}
+        chmod +x ${filename}
+    fi
+    echo "done."
+fi
 #---------------------------------------------------
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - -
