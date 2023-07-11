@@ -320,14 +320,14 @@ fi
 #================================================================
 # (?) Strong DG time step advantage | 96^3 DOFs
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-sub_directory="${base_directory}/time_step_advantage_strong_DG"
-test_directory="${sub_directory}_local_test"
-walltime="72:00:00"
-poly_degree="5"
-number_of_grid_elements_per_dimension="16"
-final_time="12.501"
-nodes=32
-is_cpu_timing_run="false"
+# sub_directory="${base_directory}/time_step_advantage_strong_DG"
+# test_directory="${sub_directory}_local_test"
+# walltime="72:00:00"
+# poly_degree="5"
+# number_of_grid_elements_per_dimension="16"
+# final_time="12.501"
+# nodes=32
+# is_cpu_timing_run="false"
 #----------------------------------------------------------------
 # Standard Strong DG on GL flux nodes with n_quad=2*(P+1)
 # Strong DG CFL limit runs
@@ -355,28 +355,28 @@ is_cpu_timing_run="false"
 # source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "Roe" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true" "6" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
 # cfl_number="0.26"
 # source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "Roe" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true" "6" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
-cfl_number="0.11"
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "Roe" ${TP_FLUX_type} "TGV" "first_and_last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true" "6" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
+# cfl_number="0.11"
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "Roe" ${TP_FLUX_type} "TGV" "first_and_last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true" "6" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
 #----------------------------------------------------------------
 #================================================================
 
 #================================================================
-# (?) Strong DG over-integration accuracy | 96^3 DOFs
+# (?) Strong DG over-integration stability | 64^3 DOFs, P7
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-sub_directory="${base_directory}/over_integration_accuracy_strong_DG"
+sub_directory="${base_directory}/high_poly_degree_GL_flux_nodes"
 test_directory="${sub_directory}_local_test"
-walltime="72:00:00"
-poly_degree="5"
-number_of_grid_elements_per_dimension="16"
+walltime="168:00:00"
+poly_degree="7"
+number_of_grid_elements_per_dimension="8"
 final_time="20.001"
 nodes=32
 is_cpu_timing_run="false"
 #----------------------------------------------------------------
 # Standard Strong DG on GL flux nodes with n_quad=over_int
 # Strong DG over-integration accuracy runs
-over_int="4"
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "Roe" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true" ${over_int} "GL" "0.1" "large_eddy_simulation" "0.10" ${final_time} ${is_cpu_timing_run}
 over_int="2"
+source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "Roe" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true" ${over_int} "GL" "0.1" "large_eddy_simulation" "0.10" ${final_time} ${is_cpu_timing_run}
+over_int="4"
 source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "Roe" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true" ${over_int} "GL" "0.1" "large_eddy_simulation" "0.10" ${final_time} ${is_cpu_timing_run}
 #----------------------------------------------------------------
 #================================================================
