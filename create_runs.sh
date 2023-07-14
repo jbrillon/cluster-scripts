@@ -374,9 +374,9 @@ is_cpu_timing_run="false"
 #----------------------------------------------------------------
 # Standard Strong DG on GL flux nodes with n_quad=over_int
 # Strong DG over-integration accuracy runs
-over_int="2"
+over_int="0"
 source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "Roe" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true" ${over_int} "GL" "0.1" "large_eddy_simulation" "0.10" ${final_time} ${is_cpu_timing_run}
-over_int="4"
+over_int="1"
 source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "Roe" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true" ${over_int} "GL" "0.1" "large_eddy_simulation" "0.10" ${final_time} ${is_cpu_timing_run}
 #----------------------------------------------------------------
 #================================================================
