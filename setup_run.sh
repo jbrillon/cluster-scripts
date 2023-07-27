@@ -186,7 +186,7 @@ if [ ${first_or_last_run} == "last" ] || [ ${first_or_last_run} == "first_and_la
     echo '    echo "================================================="'>>${filename}
     echo '    echo "STARTING: ${TARGET_DIR[$j]}"'>>${filename}
     echo '    echo "================================================="'>>${filename}
-    echo '    cp /home/julien/Codes/2023-05-12/PHiLiP/build_release/bin/PHiLiP_3D ${TARGET_DIR[$j]}/;'>>${filename}
+    echo '    cp /home/julien/Codes/2023-07-24/PHiLiP/build_release/bin/PHiLiP_3D ${TARGET_DIR[$j]}/;'>>${filename}
     echo '    cd ${TARGET_DIR[$j]};'>>${filename}
     echo '    /usr/bin/mpirun "-np" "8" PHiLiP_3D "-i" "input.prm"'>>${filename}
     echo '    cd ../;'>>${filename}
