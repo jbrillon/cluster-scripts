@@ -24,6 +24,24 @@ if [ ! -d ${base_directory} ]; then
     mkdir "${base_directory}"
 fi
 
+#================================================================
+# DHIT RUNS
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+sub_directory="${base_directory}/DHIT"
+test_directory="${sub_directory}_local_test"
+walltime="1:00:00"
+poly_degree="3"
+number_of_grid_elements_per_dimension="32"
+final_time="2.001"
+nodes=32
+is_cpu_timing_run="false"
+cfl_number="0.2"
+#----------------------------------------------------------------
+# cDG NSFR
+source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "DHIT" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.12" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
+# Strong DG
+over_int="4"
+source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "Roe" ${TP_FLUX_type} "DHIT" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "true" ${over_int} "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
 # #================================================================
 # # (1A) FLUX NODES TYPE / BASELINE NSFR SCHEME | 96^3 DOFs
 # #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -279,47 +297,47 @@ fi
 # #----------------------------------------------------------------
 # #================================================================
 
-#================================================================
-# (?) cDG vs cPlus time step advantage / BASELINE NSFR SCHEME | 96^3 DOFs
-#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-sub_directory="${base_directory}/time_step_advantage_with_physical_check"
-test_directory="${sub_directory}_local_test"
-walltime="48:00:00"
-poly_degree="5"
-number_of_grid_elements_per_dimension="16"
-final_time="12.501"
-nodes=32
-is_cpu_timing_run="false"
-#----------------------------------------------------------------
-# NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=P+1 (i.e. no over-integration)
-# vs
-# NSFR cPlus with IR two-point numerical flux, on GL flux nodes, n_quad=P+1 (i.e. no over-integration)
-# cDG CFL limit runs
-cfl_number="0.32"
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
-cfl_number="0.30"
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
-cfl_number="0.28"
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
-cfl_number="0.26"
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
-cfl_number="0.24"
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
-cfl_number="0.22"
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
-# cPlus CFL limit runs
-cfl_number="0.42"
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cPlus" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
-cfl_number="0.40"
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cPlus" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
-cfl_number="0.38"
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cPlus" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
-cfl_number="0.36"
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cPlus" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
-cfl_number="0.34"
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cPlus" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
-cfl_number="0.32"
-source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cPlus" "2PF" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
+# #================================================================
+# # (?) cDG vs cPlus time step advantage / BASELINE NSFR SCHEME | 96^3 DOFs
+# #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# sub_directory="${base_directory}/time_step_advantage_with_physical_check"
+# test_directory="${sub_directory}_local_test"
+# walltime="48:00:00"
+# poly_degree="5"
+# number_of_grid_elements_per_dimension="16"
+# final_time="12.501"
+# nodes=32
+# is_cpu_timing_run="false"
+# #----------------------------------------------------------------
+# # NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=P+1 (i.e. no over-integration)
+# # vs
+# # NSFR cPlus with IR two-point numerical flux, on GL flux nodes, n_quad=P+1 (i.e. no over-integration)
+# # cDG CFL limit runs
+# cfl_number="0.32"
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
+# cfl_number="0.30"
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
+# cfl_number="0.28"
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
+# cfl_number="0.26"
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
+# cfl_number="0.24"
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
+# cfl_number="0.22"
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
+# # cPlus CFL limit runs
+# cfl_number="0.42"
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cPlus" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
+# cfl_number="0.40"
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cPlus" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
+# cfl_number="0.38"
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cPlus" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
+# cfl_number="0.36"
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cPlus" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
+# cfl_number="0.34"
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cPlus" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
+# cfl_number="0.32"
+# source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cPlus" "2PF" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
 # cfl_number="0.5"
 # source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time}
 # source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cPlus" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time}

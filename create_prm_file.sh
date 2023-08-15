@@ -55,20 +55,6 @@ if [ ${flow_case_type} == "TGV" ]; then
     # solution output
     output_solution_fixed_times_string="4.0 5.0 8.0 9.0 10.0 12.0 15.0 16.0 20.0 "
     output_solution_at_exact_fixed_times="true"
-    if [ ${is_cpu_timing_run} == "true" ]; then 
-        output_velocity_field_at_fixed_times="false"
-        output_solution_at_fixed_times="false"
-        adaptive_time_step="false"
-        constant_time_step="0.00001"
-        do_compute_unsteady_data_and_write_to_table="false"
-    elif [ ${is_cpu_timing_run} == "false" ]; then 
-        output_velocity_field_at_fixed_times="true"
-        output_solution_at_fixed_times="true"
-        adaptive_time_step="true"
-    else
-        echo "ERROR: Invalid is_cpu_timing_run '${is_cpu_timing_run}'"
-        exit 0
-    fi
 elif [ ${flow_case_type} == "DHIT" ]; then
     flow_case_type_long="decaying_homogeneous_isotropic_turbulence"
     # cfl_number="0.2"
@@ -82,7 +68,7 @@ elif [ ${flow_case_type} == "DHIT" ]; then
     apply_initial_condition_method="read_values_from_file_and_project"
     input_flow_setup_filename_prefix="./setup_files/setup"
     output_velocity_field_at_fixed_times="true"
-    output_velocity_field_times_string="0.0 0.5 0.75 1.0 1.5 2.0 "
+    output_velocity_field_times_string="0.0 0.5 1.0 1.5 2.0 "
     output_vorticity_magnitude_field_in_addition_to_velocity="true"
     all_boundaries_are_periodic="true"
     # LES parameters
@@ -90,7 +76,7 @@ elif [ ${flow_case_type} == "DHIT" ]; then
     ratio_of_filter_width_to_cell_size="1.0"
     # solution output
     output_solution_at_fixed_times="true"
-    output_solution_fixed_times_string="0.0 0.5 0.75 1.0 1.5 2.0 "
+    output_solution_fixed_times_string="0.0 0.5 1.0 1.5 2.0 "
     output_solution_at_exact_fixed_times="true"
     adaptive_time_step="true"
 elif [ ${flow_case_type} == "TCF" ]; then
@@ -111,6 +97,21 @@ elif [ ${flow_case_type} == "TCF" ]; then
     adaptive_time_step="true"
 else 
     echo "ERROR: Invalid flow_case_type '${flow_case_type}'"
+    exit 0
+fi
+# modify parameters if CPU timing run
+if [ ${is_cpu_timing_run} == "true" ]; then 
+    output_velocity_field_at_fixed_times="false"
+    output_solution_at_fixed_times="false"
+    adaptive_time_step="false"
+    constant_time_step="0.00001"
+    do_compute_unsteady_data_and_write_to_table="false"
+elif [ ${is_cpu_timing_run} == "false" ]; then 
+    output_velocity_field_at_fixed_times="true"
+    output_solution_at_fixed_times="true"
+    adaptive_time_step="true"
+else
+    echo "ERROR: Invalid is_cpu_timing_run '${is_cpu_timing_run}'"
     exit 0
 fi
 
