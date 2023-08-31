@@ -49,6 +49,8 @@ elif [ ${SGS_model_type_short} == "WALE" ]; then
     SGS_model_type="wall_adaptive_local_eddy_viscosity"
 elif [ ${SGS_model_type_short} == "VRMN" ]; then
     SGS_model_type="vreman"
+elif [ ${SGS_model_type_short} == "SI.SMAG" ]; then
+    SGS_model_type="shear_improved_smagorinsky"
 else 
     echo "ERROR: Invalid SGS_model_type_short"
     exit 0
