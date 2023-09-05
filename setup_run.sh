@@ -49,6 +49,8 @@ elif [ ${SGS_model_type_short} == "WALE" ]; then
     SGS_model_type="wall_adaptive_local_eddy_viscosity"
 elif [ ${SGS_model_type_short} == "VRMN" ]; then
     SGS_model_type="vreman"
+elif [ ${SGS_model_type_short} == "SI.SMAG" ]; then
+    SGS_model_type="shear_improved_smagorinsky"
 else 
     echo "ERROR: Invalid SGS_model_type_short"
     exit 0
@@ -186,7 +188,7 @@ if [ ${first_or_last_run} == "last" ] || [ ${first_or_last_run} == "first_and_la
     echo '    echo "================================================="'>>${filename}
     echo '    echo "STARTING: ${TARGET_DIR[$j]}"'>>${filename}
     echo '    echo "================================================="'>>${filename}
-    echo '    cp /home/julien/Codes/2023-07-24/PHiLiP/build_release/bin/PHiLiP_3D ${TARGET_DIR[$j]}/;'>>${filename}
+    echo '    cp /home/julien/Codes/PHiLiP/build_release/bin/PHiLiP_3D ${TARGET_DIR[$j]}/;'>>${filename}
     echo '    cd ${TARGET_DIR[$j]};'>>${filename}
     echo '    /usr/bin/mpirun "-np" "8" PHiLiP_3D "-i" "input.prm"'>>${filename}
     echo '    cd ../;'>>${filename}
@@ -291,7 +293,7 @@ if [ ${is_cpu_timing_run} == "true" ]; then
         echo "NUM_PROCS=\"${number_of_processors}\"                           ## WARNING: must correspond to nodes*(ntasks-per-node) above">>${filename}
         echo "RUN_ON_TMPDIR=${run_on_temp_dir}                      ## Set as true for fast write speeds, however, output files will only be copied to your job submit directory once mpirun has completed.">>${filename}
         echo " ">>${filename}
-        echo "PHiLiP_EXECUTABLE=\"/home/\${SLURM_USER}/scratch/PHiLiP_\${PHiLiP_DIMENSIONS}D_timer2_AC\"">>${filename}
+        echo "PHiLiP_EXECUTABLE=\"/home/\${SLURM_USER}/scratch/PHiLiP_\${PHiLiP_DIMENSIONS}D_20230815\"">>${filename}
         echo " ">>${filename}
         echo "## Below are the modules needed to run the executable">>${filename}
         echo "module --force purge # not needed?">>${filename}
