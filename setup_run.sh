@@ -24,6 +24,7 @@ physics_model_type=${20}
 cfl_number=${21}
 final_time=${22}
 is_cpu_timing_run=${23}
+poly_degree_max_large_scales=${24}
 #---------------------------------------------------
 let number_of_processors=${nodes}*${ntasks_per_node}
 #---------------------------------------------------
@@ -89,6 +90,16 @@ elif [ ${pde_type} == "physics_model" ]; then
         turbulence_simulation_type="ILES"
     elif [ ${physics_model_type} == "large_eddy_simulation" ]; then
         turbulence_simulation_type="LES_${SGS_model_type_short}_MC-${SGS_model_constant}"
+    else 
+        echo "ERROR: Invalid physics_model_type"
+        exit 0
+    fi
+elif [ ${pde_type} == "physics_model_filtered" ]; then
+    fluid_type="viscous"
+    if [ ${physics_model_type} == "navier_stokes_model" ]; then
+        turbulence_simulation_type="ILES_filtered"
+    elif [ ${physics_model_type} == "large_eddy_simulation" ]; then
+        turbulence_simulation_type="LES_filtered_pL${poly_degree_max_large_scales}_${SGS_model_type_short}_MC-${SGS_model_constant}"
     else 
         echo "ERROR: Invalid physics_model_type"
         exit 0
@@ -221,7 +232,8 @@ ${SGS_model_constant} \
 ${physics_model_type} \
 ${cfl_number} \
 ${final_time} \
-${is_cpu_timing_run}
+${is_cpu_timing_run} \
+${poly_degree_max_large_scales}
 #---------------------------------------------------
 
 #---------------------------------------------------
@@ -360,7 +372,8 @@ ${SGS_model_constant} \
 ${physics_model_type} \
 ${cfl_number} \
 ${final_time} \
-${is_cpu_timing_run}
+${is_cpu_timing_run} \
+${poly_degree_max_large_scales}
 #---------------------------------------------------
 
 #---------------------------------------------------

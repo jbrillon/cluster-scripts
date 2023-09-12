@@ -25,24 +25,47 @@ if [ ! -d ${base_directory} ]; then
 fi
 
 #================================================================
-# Shear-Improved SGS model
+# High-Pass Filtered Smagorinsky Model
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 sub_directory="${base_directory}/sgs_model_GL_flux_nodes"
 test_directory="${sub_directory}_local_test"
-walltime="96:00:00"
+walltime="144:00:00"
 poly_degree="5"
 number_of_grid_elements_per_dimension="16"
 final_time="12.501"
 nodes=32
 is_cpu_timing_run="false"
 #----------------------------------------------------------------
-# cDG NSFR LES Shear-Improved Smagorinsky Model
+# cDG NSFR LES High-Pass Filtered Smagorinsky Model
 cfl_number="0.1"
-source ./setup_run.sh ${sub_directory} "physics_model" "SI.SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
-source ./setup_run.sh ${sub_directory} "physics_model" "SI.SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.16" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
-source ./setup_run.sh ${sub_directory} "physics_model" "SI.SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.18" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
+large_scale_poly_degree_max="3"
+source ./setup_run.sh ${sub_directory} "physics_model_filtered" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max}
+large_scale_poly_degree_max="2"
+source ./setup_run.sh ${sub_directory} "physics_model_filtered" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max}
+large_scale_poly_degree_max="4"
+source ./setup_run.sh ${sub_directory} "physics_model_filtered" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max}
 #----------------------------------------------------------------
 #================================================================
+
+# #================================================================
+# # Shear-Improved SGS model
+# #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# sub_directory="${base_directory}/sgs_model_GL_flux_nodes"
+# test_directory="${sub_directory}_local_test"
+# walltime="96:00:00"
+# poly_degree="5"
+# number_of_grid_elements_per_dimension="16"
+# final_time="12.501"
+# nodes=32
+# is_cpu_timing_run="false"
+# #----------------------------------------------------------------
+# # cDG NSFR LES Shear-Improved Smagorinsky Model
+# cfl_number="0.1"
+# source ./setup_run.sh ${sub_directory} "physics_model" "SI.SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
+# source ./setup_run.sh ${sub_directory} "physics_model" "SI.SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.16" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
+# source ./setup_run.sh ${sub_directory} "physics_model" "SI.SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.18" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
+# #----------------------------------------------------------------
+# #================================================================
 
 # #================================================================
 # # (1A) FLUX NODES TYPE / BASELINE NSFR SCHEME | 96^3 DOFs

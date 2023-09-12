@@ -15,6 +15,10 @@ SGS_model_constant=${14}
 physics_model_type=${15}
 cfl_number=${16}
 final_time=${17}
+is_cpu_timing_run=${18}
+poly_degree_max_large_scales=${19}
+# output_vtk_solution_files=${18}
+# note: add a parameter for turning off output solution files because we dont care for certain types of runs like CFL limits
 # determine if using standard DG or split form
 if [ ${run_standard_dg} == "true" ]; then
     use_split_form="false"
@@ -30,6 +34,13 @@ vreman_model_constant=${SGS_model_constant} #"0.036"
 reference_length="1.0" # note: this actually serves no purpose in PHiLiP
 constant_time_step="0"
 do_compute_unsteady_data_and_write_to_table="true"
+do_compute_filtered_solution="false"
+apply_modal_high_pass_filter_on_filtered_solution="false"
+# -- PDE specific values
+if [ ${pde_type} == "physics_model_filtered" ]; then
+    do_compute_filtered_solution="true"
+    apply_modal_high_pass_filter_on_filtered_solution="true"
+fi
 # -- Case specific values
 if [ ${flow_case_type} == "TGV" ]; then
     flow_case_type_long="taylor_green_vortex"
@@ -194,6 +205,9 @@ echo "    set smagorinsky_model_constant = ${smagorinsky_model_constant}">>${fil
 echo "    set WALE_model_constant = ${WALE_model_constant}">>${filename}
 echo "    set vreman_model_constant = ${vreman_model_constant}">>${filename}
 echo "    set ratio_of_filter_width_to_cell_size = ${ratio_of_filter_width_to_cell_size}">>${filename}
+echo "    set do_compute_filtered_solution = ${do_compute_filtered_solution}">>${filename}
+echo "    set apply_modal_high_pass_filter_on_filtered_solution = ${apply_modal_high_pass_filter_on_filtered_solution}">>${filename}
+echo "    set poly_degree_max_large_scales = ${poly_degree_max_large_scales}">>${filename}
 echo "  end">>${filename}
 echo "end">>${filename}
 echo " ">>${filename}
