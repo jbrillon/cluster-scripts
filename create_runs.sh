@@ -43,7 +43,7 @@ source ./setup_run.sh ${sub_directory} "physics_model_filtered" "SS.VMS" "cDG" "
 large_scale_poly_degree_max="2"
 source ./setup_run.sh ${sub_directory} "physics_model_filtered" "SS.VMS" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max}
 large_scale_poly_degree_max="4"
-source ./setup_run.sh ${sub_directory} "physics_model_filtered" "SS.VMS" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max}
+source ./setup_run.sh ${sub_directory} "physics_model_filtered" "SS.VMS" "cDG" "2PF" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max}
 #----------------------------------------------------------------
 #================================================================
 
