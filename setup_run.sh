@@ -52,6 +52,10 @@ elif [ ${SGS_model_type_short} == "VRMN" ]; then
     SGS_model_type="vreman"
 elif [ ${SGS_model_type_short} == "SI.SMAG" ]; then
     SGS_model_type="shear_improved_smagorinsky"
+elif [ ${SGS_model_type_short} == "SS.VMS" ]; then
+    SGS_model_type="small_small_variational_multiscale"
+elif [ ${SGS_model_type_short} == "AA.VMS" ]; then
+    SGS_model_type="all_all_variational_multiscale"
 else 
     echo "ERROR: Invalid SGS_model_type_short"
     exit 0
@@ -199,7 +203,7 @@ if [ ${first_or_last_run} == "last" ] || [ ${first_or_last_run} == "first_and_la
     echo '    echo "================================================="'>>${filename}
     echo '    echo "STARTING: ${TARGET_DIR[$j]}"'>>${filename}
     echo '    echo "================================================="'>>${filename}
-    echo '    cp /home/julien/Codes/PHiLiP/build_release/bin/PHiLiP_3D ${TARGET_DIR[$j]}/;'>>${filename}
+    echo '    cp /home/julien/Codes/2023-07-25/PHiLiP/build_release/bin/PHiLiP_3D ${TARGET_DIR[$j]}/;'>>${filename}
     echo '    cd ${TARGET_DIR[$j]};'>>${filename}
     echo '    /usr/bin/mpirun "-np" "8" PHiLiP_3D "-i" "input.prm"'>>${filename}
     echo '    cd ../;'>>${filename}
