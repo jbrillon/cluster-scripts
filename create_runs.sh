@@ -16,36 +16,138 @@ TP_FLUX_type="IR"
 # Guide to choosing nodes based on DOFs
 # nodes/DOFs: 1/24^3 (P5), 4/48^3 (P5), 32/96^3 (P5), 256/256^3 (P3)
 
-# SMAG, WALE, VRMN, SI.SMAG
-# LxF, Roe, L2R, 2PF, 2PF-LxF, 2PF-Roe, 2PF-L2R
+# SGS models:
+# (1) Baseline models:
+#  -> SMAG, WALE, VRMN, SI.SMAG, DYNAMIC.SMAG
+# (2) Models with the low Reynolds number eddy-viscosity correction (LRNC) applied:
+#  -> SMAG.LRNC, WALE.LRNC, VRMN.LRNC, SI.SMAG.LRNC, DYNAMIC.SMAG.LRNC
+# Riemann solvers
+#  -> LxF, Roe, L2R, 2PF, 2PF-LxF, 2PF-Roe, 2PF-L2R
 
 if [ ! -d ${base_directory} ]; then
     echo "Creating base directory for runs: ${base_directory}"
     mkdir "${base_directory}"
 fi
 
+# #================================================================
+# # cDG collocated vs cDG uncollocated cpu time comparison
+# #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# sub_directory="${base_directory}/cpu_time_coll_vs_uncoll"
+# test_directory="${sub_directory}_local_test"
+# walltime="3:00:00"
+# number_of_grid_elements_per_dimension="4"
+# final_time="0.00001"
+# nodes=1
+# # ntasks_per_node=64
+# # note: might want to use the full node
+# is_cpu_timing_run="true"
+# cfl_number="0.1"
+# #----------------------------------------------------------------
+# # poly degree min and max
+# PMIN=1
+# PMAX=30
+# for (( p=${PMIN}; p<=${PMAX}; p++ )); do
+#     poly_degree=${p}
+#     # Uncollocated - NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=P+1 (i.e. no over-integration)
+#     if [ ${p} == ${PMIN} ]; then
+#         # signal first run
+#         source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "first" ${test_directory} "${poly_degree}" ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
+#     else
+#         source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} "${poly_degree}" ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
+#     fi
+#     let overintegration=${p}+1
+#     # Collocated - NSFR cDG with IR two-point numerical flux, on GLL flux nodes, n_quad=P+1 (i.e. no over-integration)
+#     if [ ${p} == ${PMAX} ]; then
+#         # signal last run
+#         source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "last" ${test_directory} "${poly_degree}" ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GLL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
+#     else
+#         source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} "${poly_degree}" ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GLL" "0.1" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run}
+#     fi
+# done
+
 #================================================================
-# High-Pass Filtered Small-Small VMS Model
+# Scaling analysis for 96^3 DOF case
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-sub_directory="${base_directory}/sgs_model_GL_flux_nodes"
+sub_directory="${base_directory}/strong_scaling_TGV_p5_96_run01"
 test_directory="${sub_directory}_local_test"
-walltime="72:00:00"
+walltime="1:00:00"
 poly_degree="5"
 number_of_grid_elements_per_dimension="16"
-final_time="12.501"
-nodes=32
-is_cpu_timing_run="false"
+final_time="0.00001"
+is_cpu_timing_run="scaling"
 #----------------------------------------------------------------
-# cDG NSFR LES High-Pass Filtered Small-Small VMS Model
 cfl_number="0.1"
 large_scale_poly_degree_max="3"
-source ./setup_run.sh ${sub_directory} "physics_model_filtered" "SS.VMS" "cDG" "2PF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max}
-large_scale_poly_degree_max="2"
-source ./setup_run.sh ${sub_directory} "physics_model_filtered" "SS.VMS" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max}
-large_scale_poly_degree_max="4"
-source ./setup_run.sh ${sub_directory} "physics_model_filtered" "SS.VMS" "cDG" "2PF" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max}
+dynamic_smag_clipping_limit="0.01"
+#----------------------------------------------------------------
+# poly degree min and max
+NODESMIN=1
+NODESMAX=32
+for (( nodes=${NODESMIN}; nodes<=${NODESMAX}; nodes+=nodes )); do
+    if [ ${p} == ${PMIN} ]; then
+        # signal first run
+        first_or_last_run="first"
+    elif [ ${p} == ${PMAX} ]; then
+        # signal first run
+        first_or_last_run="last"
+    else
+        first_or_last_run="-"
+    fi
+    # Uncollocated - NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=P+1 (i.e. no over-integration)
+    source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" ${first_or_last_run} ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max} ${dynamic_smag_clipping_limit}
+done
 #----------------------------------------------------------------
 #================================================================
+
+# #================================================================
+# # Low Reynolds number corrected SGS models
+# #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# sub_directory="${base_directory}/sgs_model_GL_flux_nodes"
+# test_directory="${sub_directory}_local_test"
+# walltime="96:00:00"
+# poly_degree="5"
+# number_of_grid_elements_per_dimension="16"
+# final_time="12.501"
+# nodes=32
+# is_cpu_timing_run="false"
+# #----------------------------------------------------------------
+# cfl_number="0.1"
+# large_scale_poly_degree_max="3"
+# dynamic_smag_clipping_limit="0.01"
+# # WALE, VRMN, SI.SMAG, DYNAMIC.SMAG
+# source ./setup_run.sh ${sub_directory} "physics_model" "WALE.LRNC" "cDG" "2PF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max} ${dynamic_smag_clipping_limit}
+# source ./setup_run.sh ${sub_directory} "physics_model" "VRMN.LRNC" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max} ${dynamic_smag_clipping_limit}
+# source ./setup_run.sh ${sub_directory} "physics_model" "SI.SMAG.LRNC" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max} ${dynamic_smag_clipping_limit}
+# source ./setup_run.sh ${sub_directory} "physics_model" "DYNAMIC.SMAG.LRNC" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max} ${dynamic_smag_clipping_limit}
+# # HPF Smagorinsky
+# source ./setup_run.sh ${sub_directory} "physics_model_filtered" "SMAG.LRNC" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max} ${dynamic_smag_clipping_limit}
+# # HPF Shear-Improved Smagorinsky
+# source ./setup_run.sh ${sub_directory} "physics_model_filtered" "SI.SMAG.LRNC" "cDG" "2PF" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max} ${dynamic_smag_clipping_limit}
+# #----------------------------------------------------------------
+# #================================================================
+
+# #================================================================
+# # High-Pass Filtered Small-Small VMS Model
+# #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# sub_directory="${base_directory}/sgs_model_GL_flux_nodes"
+# test_directory="${sub_directory}_local_test"
+# walltime="72:00:00"
+# poly_degree="5"
+# number_of_grid_elements_per_dimension="16"
+# final_time="12.501"
+# nodes=32
+# is_cpu_timing_run="false"
+# #----------------------------------------------------------------
+# # cDG NSFR LES High-Pass Filtered Small-Small VMS Model
+# cfl_number="0.1"
+# large_scale_poly_degree_max="3"
+# source ./setup_run.sh ${sub_directory} "physics_model_filtered" "SS.VMS" "cDG" "2PF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max}
+# large_scale_poly_degree_max="2"
+# source ./setup_run.sh ${sub_directory} "physics_model_filtered" "SS.VMS" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max}
+# large_scale_poly_degree_max="4"
+# source ./setup_run.sh ${sub_directory} "physics_model_filtered" "SS.VMS" "cDG" "2PF" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max}
+# #----------------------------------------------------------------
+# #================================================================
 
 # #================================================================
 # # High-Pass Filtered Smagorinsky Model

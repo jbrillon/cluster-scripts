@@ -17,6 +17,8 @@ cfl_number=${16}
 final_time=${17}
 is_cpu_timing_run=${18}
 poly_degree_max_large_scales=${19}
+dynamic_smagorinsky_model_constant_clipping_limit=${20}
+apply_low_reynolds_number_eddy_viscosity_correction=${21}
 # output_vtk_solution_files=${18}
 # note: add a parameter for turning off output solution files because we dont care for certain types of runs like CFL limits
 # determine if using standard DG or split form
@@ -117,6 +119,12 @@ if [ ${is_cpu_timing_run} == "true" ]; then
     adaptive_time_step="false"
     constant_time_step="0.00001"
     do_compute_unsteady_data_and_write_to_table="false"
+elif [ ${is_cpu_timing_run} == "scaling" ]; then 
+    output_velocity_field_at_fixed_times="false"
+    output_solution_at_fixed_times="false"
+    adaptive_time_step="false"
+    constant_time_step="0.00001"
+    do_compute_unsteady_data_and_write_to_table="true"
 elif [ ${is_cpu_timing_run} == "false" ]; then 
     output_velocity_field_at_fixed_times="true"
     output_solution_at_fixed_times="true"
@@ -208,6 +216,8 @@ echo "    set ratio_of_filter_width_to_cell_size = ${ratio_of_filter_width_to_ce
 echo "    set do_compute_filtered_solution = ${do_compute_filtered_solution}">>${filename}
 echo "    set apply_modal_high_pass_filter_on_filtered_solution = ${apply_modal_high_pass_filter_on_filtered_solution}">>${filename}
 echo "    set poly_degree_max_large_scales = ${poly_degree_max_large_scales}">>${filename}
+echo "    set dynamic_smagorinsky_model_constant_clipping_limit = ${dynamic_smagorinsky_model_constant_clipping_limit}">>${filename}
+echo "    set apply_low_reynolds_number_eddy_viscosity_correction = ${apply_low_reynolds_number_eddy_viscosity_correction}">>${filename}
 echo "  end">>${filename}
 echo "end">>${filename}
 echo " ">>${filename}

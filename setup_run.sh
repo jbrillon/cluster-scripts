@@ -25,6 +25,7 @@ cfl_number=${21}
 final_time=${22}
 is_cpu_timing_run=${23}
 poly_degree_max_large_scales=${24}
+dynamic_smagorinsky_model_constant_clipping_limit=${25}
 #---------------------------------------------------
 let number_of_processors=${nodes}*${ntasks_per_node}
 #---------------------------------------------------
@@ -43,7 +44,9 @@ if [ ! -d ${test_directory} ]; then
 fi
 
 # determine SGS model type name from the short name
+# determine if the low Reynolds number correction should be applied
 SGS_model_type="X"
+apply_low_reynolds_number_eddy_viscosity_correction="false"
 if [ ${SGS_model_type_short} == "SMAG" ]; then
     SGS_model_type="smagorinsky"
 elif [ ${SGS_model_type_short} == "WALE" ]; then
@@ -56,9 +59,39 @@ elif [ ${SGS_model_type_short} == "SS.VMS" ]; then
     SGS_model_type="small_small_variational_multiscale"
 elif [ ${SGS_model_type_short} == "AA.VMS" ]; then
     SGS_model_type="all_all_variational_multiscale"
+elif [ ${SGS_model_type_short} == "DYNAMIC.SMAG" ]; then
+    SGS_model_type="dynamic_smagorinsky"
+elif [ ${SGS_model_type_short} == "SMAG.LRNC" ]; then
+    SGS_model_type="smagorinsky"
+    apply_low_reynolds_number_eddy_viscosity_correction="true"
+elif [ ${SGS_model_type_short} == "WALE.LRNC" ]; then
+    SGS_model_type="wall_adaptive_local_eddy_viscosity"
+    apply_low_reynolds_number_eddy_viscosity_correction="true"
+elif [ ${SGS_model_type_short} == "VRMN.LRNC" ]; then
+    SGS_model_type="vreman"
+    apply_low_reynolds_number_eddy_viscosity_correction="true"
+elif [ ${SGS_model_type_short} == "SI.SMAG.LRNC" ]; then
+    SGS_model_type="shear_improved_smagorinsky"
+    apply_low_reynolds_number_eddy_viscosity_correction="true"
+elif [ ${SGS_model_type_short} == "SS.VMS.LRNC" ]; then
+    SGS_model_type="small_small_variational_multiscale"
+    apply_low_reynolds_number_eddy_viscosity_correction="true"
+elif [ ${SGS_model_type_short} == "AA.VMS.LRNC" ]; then
+    SGS_model_type="all_all_variational_multiscale"
+    apply_low_reynolds_number_eddy_viscosity_correction="true"
+elif [ ${SGS_model_type_short} == "DYNAMIC.SMAG.LRNC" ]; then
+    SGS_model_type="dynamic_smagorinsky"
+    apply_low_reynolds_number_eddy_viscosity_correction="true"
 else 
     echo "ERROR: Invalid SGS_model_type_short"
     exit 0
+fi
+# create the descriptive string
+SGS_model_string="${SGS_model_type_short}_MC-${SGS_model_constant}"
+if [ ${SGS_model_type_short} == "DYNAMIC.SMAG" ]; then
+    SGS_model_string="${SGS_model_type_short}_CLIPMC-${dynamic_smagorinsky_model_constant_clipping_limit}-pL${poly_degree_max_large_scales}"
+elif [ ${SGS_model_type_short} == "DYNAMIC.SMAG.LRNC" ]; then
+    SGS_model_string="${SGS_model_type_short}_CLIPMC-${dynamic_smagorinsky_model_constant_clipping_limit}-pL${poly_degree_max_large_scales}"
 fi
 
 # determine numerical flux name from the short name
@@ -93,7 +126,7 @@ elif [ ${pde_type} == "physics_model" ]; then
     if [ ${physics_model_type} == "navier_stokes_model" ]; then
         turbulence_simulation_type="ILES"
     elif [ ${physics_model_type} == "large_eddy_simulation" ]; then
-        turbulence_simulation_type="LES_${SGS_model_type_short}_MC-${SGS_model_constant}"
+        turbulence_simulation_type="LES_${SGS_model_string}"
     else 
         echo "ERROR: Invalid physics_model_type"
         exit 0
@@ -103,7 +136,7 @@ elif [ ${pde_type} == "physics_model_filtered" ]; then
     if [ ${physics_model_type} == "navier_stokes_model" ]; then
         turbulence_simulation_type="ILES_filtered"
     elif [ ${physics_model_type} == "large_eddy_simulation" ]; then
-        turbulence_simulation_type="LES_filtered_pL${poly_degree_max_large_scales}_${SGS_model_type_short}_MC-${SGS_model_constant}"
+        turbulence_simulation_type="LES_filtered_pL${poly_degree_max_large_scales}_${SGS_model_string}"
     else 
         echo "ERROR: Invalid physics_model_type"
         exit 0
@@ -237,7 +270,9 @@ ${physics_model_type} \
 ${cfl_number} \
 ${final_time} \
 ${is_cpu_timing_run} \
-${poly_degree_max_large_scales}
+${poly_degree_max_large_scales} \
+${dynamic_smagorinsky_model_constant_clipping_limit} \
+${apply_low_reynolds_number_eddy_viscosity_correction}
 #---------------------------------------------------
 
 #---------------------------------------------------
