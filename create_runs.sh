@@ -29,6 +29,25 @@ if [ ! -d ${base_directory} ]; then
     mkdir "${base_directory}"
 fi
 
+#================================================================
+# Turbulent channel flow
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+sub_directory="${base_directory}/turbulent_channel_flow"
+test_directory="${sub_directory}_local_test"
+walltime="96:00:00"
+poly_degree="3"
+number_of_grid_elements_per_dimension="16"
+final_time="12.501"
+nodes=1
+is_cpu_timing_run="false"
+#----------------------------------------------------------------
+cfl_number="0.1"
+large_scale_poly_degree_max="3"
+dynamic_smag_clipping_limit="0.01"
+source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TCF" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max} ${dynamic_smag_clipping_limit}
+#----------------------------------------------------------------
+#================================================================
+
 # #================================================================
 # # Scaling analysis for 96^3 DOF case
 # #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -63,32 +82,32 @@ fi
 # #----------------------------------------------------------------
 # #================================================================
 
-#================================================================
-# Low Reynolds number corrected SGS models
-#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-sub_directory="${base_directory}/sgs_model_GL_flux_nodes"
-test_directory="${sub_directory}_local_test"
-walltime="96:00:00"
-poly_degree="5"
-number_of_grid_elements_per_dimension="16"
-final_time="12.501"
-nodes=1
-is_cpu_timing_run="false"
-#----------------------------------------------------------------
-cfl_number="0.1"
-large_scale_poly_degree_max="3"
-dynamic_smag_clipping_limit="0.01"
-# WALE, VRMN, SI.SMAG, DYNAMIC.SMAG
-source ./setup_run.sh ${sub_directory} "physics_model" "WALE.LRNC" "cDG" "2PF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max} ${dynamic_smag_clipping_limit}
-source ./setup_run.sh ${sub_directory} "physics_model" "VRMN.LRNC" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max} ${dynamic_smag_clipping_limit}
-source ./setup_run.sh ${sub_directory} "physics_model" "SI.SMAG.LRNC" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max} ${dynamic_smag_clipping_limit}
-source ./setup_run.sh ${sub_directory} "physics_model" "DYNAMIC.SMAG.LRNC" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max} ${dynamic_smag_clipping_limit}
-# HPF Smagorinsky
-source ./setup_run.sh ${sub_directory} "physics_model_filtered" "SMAG.LRNC" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max} ${dynamic_smag_clipping_limit}
-# HPF Shear-Improved Smagorinsky
-source ./setup_run.sh ${sub_directory} "physics_model_filtered" "SI.SMAG.LRNC" "cDG" "2PF" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max} ${dynamic_smag_clipping_limit}
-#----------------------------------------------------------------
-#================================================================
+# #================================================================
+# # Low Reynolds number corrected SGS models
+# #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# sub_directory="${base_directory}/sgs_model_GL_flux_nodes"
+# test_directory="${sub_directory}_local_test"
+# walltime="96:00:00"
+# poly_degree="5"
+# number_of_grid_elements_per_dimension="16"
+# final_time="12.501"
+# nodes=1
+# is_cpu_timing_run="false"
+# #----------------------------------------------------------------
+# cfl_number="0.1"
+# large_scale_poly_degree_max="3"
+# dynamic_smag_clipping_limit="0.01"
+# # WALE, VRMN, SI.SMAG, DYNAMIC.SMAG
+# source ./setup_run.sh ${sub_directory} "physics_model" "WALE.LRNC" "cDG" "2PF" ${TP_FLUX_type} "TGV" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max} ${dynamic_smag_clipping_limit}
+# source ./setup_run.sh ${sub_directory} "physics_model" "VRMN.LRNC" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max} ${dynamic_smag_clipping_limit}
+# source ./setup_run.sh ${sub_directory} "physics_model" "SI.SMAG.LRNC" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max} ${dynamic_smag_clipping_limit}
+# source ./setup_run.sh ${sub_directory} "physics_model" "DYNAMIC.SMAG.LRNC" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max} ${dynamic_smag_clipping_limit}
+# # HPF Smagorinsky
+# source ./setup_run.sh ${sub_directory} "physics_model_filtered" "SMAG.LRNC" "cDG" "2PF" ${TP_FLUX_type} "TGV" "-" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max} ${dynamic_smag_clipping_limit}
+# # HPF Shear-Improved Smagorinsky
+# source ./setup_run.sh ${sub_directory} "physics_model_filtered" "SI.SMAG.LRNC" "cDG" "2PF" ${TP_FLUX_type} "TGV" "last" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max} ${dynamic_smag_clipping_limit}
+# #----------------------------------------------------------------
+# #================================================================
 
 # #================================================================
 # # High-Pass Filtered Small-Small VMS Model
