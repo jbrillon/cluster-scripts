@@ -17,8 +17,8 @@ cfl_number=${16}
 final_time=${17}
 is_cpu_timing_run=${18}
 poly_degree_max_large_scales=${19}
-dynamic_smagorinsky_model_constant_clipping_limit=${20}
-apply_low_reynolds_number_eddy_viscosity_correction=${21}
+dynamic_smagorinsky_model_constant_clipping_limit_=${20}
+apply_low_reynolds_number_eddy_viscosity_correction_=${21}
 # output_vtk_solution_files=${18}
 # note: add a parameter for turning off output solution files because we dont care for certain types of runs like CFL limits
 # determine if using standard DG or split form
@@ -38,6 +38,8 @@ constant_time_step="0"
 do_compute_unsteady_data_and_write_to_table="true"
 do_compute_filtered_solution="false"
 apply_modal_high_pass_filter_on_filtered_solution="false"
+use_constant_viscosity="false"
+output_solution_every_dt_time_intervals="0.0"
 # -- PDE specific values
 if [ ${pde_type} == "physics_model_filtered" ]; then
     do_compute_filtered_solution="true"
@@ -56,9 +58,11 @@ if [ ${flow_case_type} == "TGV" ]; then
     #final_time="10.001"
     grid_left_bound="-3.141592653589793238"
     grid_right_bound="3.141592653589793238"
+    adaptive_time_step="true"
     # apply_initial_condition_method="interpolate_initial_condition_function"
     apply_initial_condition_method="project_initial_condition_function"
     input_flow_setup_filename_prefix="setup"
+    output_velocity_field_at_fixed_times="true"
     output_velocity_field_times_string="8.0 9.0 "
     output_vorticity_magnitude_field_in_addition_to_velocity="true"
     all_boundaries_are_periodic="true"
@@ -66,6 +70,7 @@ if [ ${flow_case_type} == "TGV" ]; then
     turbulent_prandtl_number="0.6"
     ratio_of_filter_width_to_cell_size="1.0"
     # solution output
+    output_solution_at_fixed_times="true"
     output_solution_fixed_times_string="4.0 5.0 8.0 9.0 10.0 12.0 15.0 16.0 20.0 "
     output_solution_at_exact_fixed_times="true"
 elif [ ${flow_case_type} == "DHIT" ]; then
@@ -94,20 +99,34 @@ elif [ ${flow_case_type} == "DHIT" ]; then
     adaptive_time_step="true"
 elif [ ${flow_case_type} == "TCF" ]; then
     flow_case_type_long="channel_flow"
+    # Navier-Stokes parameters (note; dummy Reynolds number specified)
+    reynolds_number_inf="1"
+    prandtl_number="0.71"
+    mach_infinity="0.1"
+    temperature_inf="273.15"
+    use_constant_viscosity="true"
     channel_friction_velocity_reynolds_number="395"
+    output_solution_every_dt_time_intervals="1.57079632679"
     all_boundaries_are_periodic="false"
+    # Flow Solver parameters
     turbulent_channel_number_of_cells_x_direction="21"
     turbulent_channel_number_of_cells_y_direction="16"
     turbulent_channel_number_of_cells_z_direction="16"
     turbulent_channel_mesh_stretching_function_type="carton_de_wiart_et_al"
     # turbulent_channel_mesh_stretching_function_type="gullbrand"
     # turbulent_channel_mesh_stretching_function_type="hopw"
-    xvelocity_initial_condition_type="laminar"
-    # xvelocity_initial_condition_type="turbulent"
+    # xvelocity_initial_condition_type="laminar"
+    xvelocity_initial_condition_type="turbulent"
+    apply_initial_condition_method="project_initial_condition_function"
+    output_velocity_field_at_fixed_times="false"
     output_solution_at_fixed_times="false"
     output_solution_fixed_times_string=" "
     output_solution_at_exact_fixed_times="false"
-    adaptive_time_step="true"
+    adaptive_time_step="false"
+    constant_time_step="0.000068"
+    # LES parameters
+    turbulent_prandtl_number="0.6"
+    ratio_of_filter_width_to_cell_size="1.0"
 else 
     echo "ERROR: Invalid flow_case_type '${flow_case_type}'"
     exit 0
@@ -125,11 +144,7 @@ elif [ ${is_cpu_timing_run} == "scaling" ]; then
     adaptive_time_step="false"
     constant_time_step="0.00001"
     do_compute_unsteady_data_and_write_to_table="true"
-elif [ ${is_cpu_timing_run} == "false" ]; then 
-    output_velocity_field_at_fixed_times="true"
-    output_solution_at_fixed_times="true"
-    adaptive_time_step="true"
-else
+elif [ ${is_cpu_timing_run} != "false" ]; then 
     echo "ERROR: Invalid is_cpu_timing_run '${is_cpu_timing_run}'"
     exit 0
 fi
@@ -178,10 +193,12 @@ echo "# ODE solver">>${filename}
 echo "subsection ODE solver">>${filename}
 echo "  set ode_output = quiet">>${filename}
 echo "  set ode_solver_type = runge_kutta">>${filename}
-echo "  set output_solution_every_dt_time_intervals = 0.0">>${filename}
+echo "  set output_solution_every_dt_time_intervals = ${output_solution_every_dt_time_intervals}">>${filename}
 echo "  set output_solution_at_fixed_times = ${output_solution_at_fixed_times}">>${filename}
-echo "  set output_solution_fixed_times_string = ${output_solution_fixed_times_string}">>${filename}
-echo "  set output_solution_at_exact_fixed_times = ${output_solution_at_exact_fixed_times}">>${filename}
+if [ ${output_solution_at_fixed_times} == "true" ]; then
+    echo "  set output_solution_fixed_times_string = ${output_solution_fixed_times_string}">>${filename}
+    echo "  set output_solution_at_exact_fixed_times = ${output_solution_at_exact_fixed_times}">>${filename}
+fi
 echo "  set runge_kutta_method = ssprk3_ex">>${filename}
 echo "end">>${filename}
 echo " ">>${filename}
@@ -199,28 +216,30 @@ echo "  set reynolds_number_inf = ${reynolds_number_inf}">>${filename}
 echo "  set temperature_inf = ${temperature_inf}">>${filename}
 echo "  set nondimensionalized_isothermal_wall_temperature = 1.0">>${filename}
 echo "  set thermal_boundary_condition_type = adiabatic">>${filename}
-echo "  set use_constant_viscosity = false">>${filename}
+echo "  set use_constant_viscosity = ${use_constant_viscosity}">>${filename}
 echo "  set nondimensionalized_constant_viscosity = 1.0">>${filename}
 echo "end">>${filename}
 echo " ">>${filename}
-echo "# Physics Model (if pde_type == physics_model)">>${filename}
-echo "subsection physics_model">>${filename}
-echo "  set euler_turbulence = false">>${filename}
-echo "  subsection large_eddy_simulation">>${filename}
-echo "    set SGS_model_type = ${SGS_model_type}">>${filename}
-echo "    set turbulent_prandtl_number = ${turbulent_prandtl_number}">>${filename}
-echo "    set smagorinsky_model_constant = ${smagorinsky_model_constant}">>${filename}
-echo "    set WALE_model_constant = ${WALE_model_constant}">>${filename}
-echo "    set vreman_model_constant = ${vreman_model_constant}">>${filename}
-echo "    set ratio_of_filter_width_to_cell_size = ${ratio_of_filter_width_to_cell_size}">>${filename}
-echo "    set do_compute_filtered_solution = ${do_compute_filtered_solution}">>${filename}
-echo "    set apply_modal_high_pass_filter_on_filtered_solution = ${apply_modal_high_pass_filter_on_filtered_solution}">>${filename}
-echo "    set poly_degree_max_large_scales = ${poly_degree_max_large_scales}">>${filename}
-echo "    set dynamic_smagorinsky_model_constant_clipping_limit = ${dynamic_smagorinsky_model_constant_clipping_limit}">>${filename}
-echo "    set apply_low_reynolds_number_eddy_viscosity_correction = ${apply_low_reynolds_number_eddy_viscosity_correction}">>${filename}
-echo "  end">>${filename}
-echo "end">>${filename}
-echo " ">>${filename}
+if [[ ${pde_type} == "physics_model" ]] || [[ ${pde_type} == "physics_model_filtered" ]];then
+    echo "# Physics Model">>${filename}
+    echo "subsection physics_model">>${filename}
+    echo "  set euler_turbulence = false">>${filename}
+    echo "  subsection large_eddy_simulation">>${filename}
+    echo "    set SGS_model_type = ${SGS_model_type}">>${filename}
+    echo "    set turbulent_prandtl_number = ${turbulent_prandtl_number}">>${filename}
+    echo "    set smagorinsky_model_constant = ${smagorinsky_model_constant}">>${filename}
+    echo "    set WALE_model_constant = ${WALE_model_constant}">>${filename}
+    echo "    set vreman_model_constant = ${vreman_model_constant}">>${filename}
+    echo "    set ratio_of_filter_width_to_cell_size = ${ratio_of_filter_width_to_cell_size}">>${filename}
+    echo "    set do_compute_filtered_solution = ${do_compute_filtered_solution}">>${filename}
+    echo "    set apply_modal_high_pass_filter_on_filtered_solution = ${apply_modal_high_pass_filter_on_filtered_solution}">>${filename}
+    echo "    set poly_degree_max_large_scales = ${poly_degree_max_large_scales}">>${filename}
+    echo "    set dynamic_smagorinsky_model_constant_clipping_limit = ${dynamic_smagorinsky_model_constant_clipping_limit_}">>${filename}
+    echo "    set apply_low_reynolds_number_eddy_viscosity_correction = ${apply_low_reynolds_number_eddy_viscosity_correction_}">>${filename}
+    echo "  end">>${filename}
+    echo "end">>${filename}
+    echo " ">>${filename}
+fi
 echo "# Flow Solver">>${filename}
 echo "subsection flow_solver">>${filename}
 echo "  set flow_case_type = ${flow_case_type_long}">>${filename}
@@ -236,9 +255,11 @@ echo "  set restart_files_directory_name = restart_files">>${filename}
 echo "  set output_restart_files_every_dt_time_intervals = 1.0">>${filename}
 echo "  subsection grid">>${filename}
 echo "    set grid_degree = 1">>${filename}
-echo "    set grid_left_bound = ${grid_left_bound}">>${filename}
-echo "    set grid_right_bound = ${grid_right_bound}">>${filename}
-echo "    set number_of_grid_elements_per_dimension = ${number_of_grid_elements_per_dimension_}">>${filename}
+if [[ ${flow_case_type} == "TGV" ]] || [[ ${flow_case_type} == "DHIT" ]]; then
+    echo "    set grid_left_bound = ${grid_left_bound}">>${filename}
+    echo "    set grid_right_bound = ${grid_right_bound}">>${filename}
+    echo "    set number_of_grid_elements_per_dimension = ${number_of_grid_elements_per_dimension_}">>${filename}
+fi
 echo "  end">>${filename}
 if [ ${flow_case_type} == "TGV" ]; then
     echo "  subsection taylor_green_vortex">>${filename}
@@ -251,17 +272,24 @@ elif [ ${flow_case_type} == "TCF" ]; then
     echo "    set turbulent_channel_number_of_cells_x_direction = ${turbulent_channel_number_of_cells_x_direction}">>${filename}
     echo "    set turbulent_channel_number_of_cells_y_direction = ${turbulent_channel_number_of_cells_y_direction}">>${filename}
     echo "    set turbulent_channel_number_of_cells_z_direction = ${turbulent_channel_number_of_cells_z_direction}">>${filename}
+    echo "    set turbulent_channel_domain_length_x_direction = 6.283185307179586476">>${filename}
+    echo "    set turbulent_channel_domain_length_y_direction = 2.0">>${filename}
+    echo "    set turbulent_channel_domain_length_z_direction = 3.141592653589793238">>${filename}
     echo "    set turbulent_channel_mesh_stretching_function_type = ${turbulent_channel_mesh_stretching_function_type}">>${filename}
     echo "    set xvelocity_initial_condition_type = ${xvelocity_initial_condition_type}">>${filename}
     echo "  end">>${filename}
 fi
 echo "  set apply_initial_condition_method = ${apply_initial_condition_method}">>${filename}
-echo "  set input_flow_setup_filename_prefix = ${input_flow_setup_filename_prefix}">>${filename}
+if [ ${apply_initial_condition_method} == "read_values_from_file_and_project" ]; then
+    echo "  set input_flow_setup_filename_prefix = ${input_flow_setup_filename_prefix}">>${filename}
+fi
 echo "  subsection output_velocity_field">>${filename}
 echo "    set output_velocity_field_at_fixed_times = ${output_velocity_field_at_fixed_times}">>${filename}
-echo "    set output_velocity_field_times_string = ${output_velocity_field_times_string}">>${filename}
-echo "    set output_vorticity_magnitude_field_in_addition_to_velocity = ${output_vorticity_magnitude_field_in_addition_to_velocity}">>${filename}
-echo "    set output_flow_field_files_directory_name = flow_field_files">>${filename}
+if [ ${output_velocity_field_at_fixed_times} == "true" ]; then
+    echo "    set output_velocity_field_times_string = ${output_velocity_field_times_string}">>${filename}
+    echo "    set output_vorticity_magnitude_field_in_addition_to_velocity = ${output_vorticity_magnitude_field_in_addition_to_velocity}">>${filename}
+    echo "    set output_flow_field_files_directory_name = flow_field_files">>${filename}
+fi
 echo "  end">>${filename}
 echo "  set do_compute_unsteady_data_and_write_to_table = ${do_compute_unsteady_data_and_write_to_table}">>${filename}
 echo "end">>${filename}
