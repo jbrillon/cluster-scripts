@@ -412,7 +412,9 @@ ${physics_model_type} \
 ${cfl_number} \
 ${final_time} \
 ${is_cpu_timing_run} \
-${poly_degree_max_large_scales}
+${poly_degree_max_large_scales} \
+${dynamic_smagorinsky_model_constant_clipping_limit} \
+${apply_low_reynolds_number_eddy_viscosity_correction}
 #---------------------------------------------------
 
 #---------------------------------------------------
