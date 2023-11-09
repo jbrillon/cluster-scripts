@@ -102,6 +102,8 @@ elif [ ${flow_case_type} == "TCF" ]; then
     # Navier-Stokes parameters (note; dummy Reynolds number specified)
     reynolds_number_inf="1"
     prandtl_number="0.71"
+    # mach_infinity="0.1"
+    # NOTE: mach number should be 0.1 but currently using 0.3 since it allows for a speed up according to Lodato
     mach_infinity="0.1"
     temperature_inf="273.15"
     use_constant_viscosity="true"
@@ -115,8 +117,9 @@ elif [ ${flow_case_type} == "TCF" ]; then
     turbulent_channel_mesh_stretching_function_type="carton_de_wiart_et_al"
     # turbulent_channel_mesh_stretching_function_type="gullbrand"
     # turbulent_channel_mesh_stretching_function_type="hopw"
-    # xvelocity_initial_condition_type="laminar"
-    xvelocity_initial_condition_type="turbulent"
+    xvelocity_initial_condition_type="laminar"
+    # xvelocity_initial_condition_type="turbulent"
+    relaxation_coefficient_for_turbulent_channel_flow_source_term="0.0"
     apply_initial_condition_method="project_initial_condition_function"
     output_velocity_field_at_fixed_times="false"
     output_solution_at_fixed_times="false"
@@ -215,7 +218,7 @@ echo "  set prandtl_number = ${prandtl_number}">>${filename}
 echo "  set reynolds_number_inf = ${reynolds_number_inf}">>${filename}
 echo "  set temperature_inf = ${temperature_inf}">>${filename}
 echo "  set nondimensionalized_isothermal_wall_temperature = 1.0">>${filename}
-echo "  set thermal_boundary_condition_type = adiabatic">>${filename}
+echo "  set thermal_boundary_condition_type = isothermal">>${filename}
 echo "  set use_constant_viscosity = ${use_constant_viscosity}">>${filename}
 echo "  set nondimensionalized_constant_viscosity = 1.0">>${filename}
 echo "end">>${filename}
@@ -277,6 +280,7 @@ elif [ ${flow_case_type} == "TCF" ]; then
     echo "    set turbulent_channel_domain_length_z_direction = 3.141592653589793238">>${filename}
     echo "    set turbulent_channel_mesh_stretching_function_type = ${turbulent_channel_mesh_stretching_function_type}">>${filename}
     echo "    set xvelocity_initial_condition_type = ${xvelocity_initial_condition_type}">>${filename}
+    echo "    set relaxation_coefficient_for_turbulent_channel_flow_source_term = ${relaxation_coefficient_for_turbulent_channel_flow_source_term}">>${filename}
     echo "  end">>${filename}
 fi
 echo "  set apply_initial_condition_method = ${apply_initial_condition_method}">>${filename}
