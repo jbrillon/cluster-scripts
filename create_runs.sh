@@ -29,58 +29,58 @@ if [ ! -d ${base_directory} ]; then
     mkdir "${base_directory}"
 fi
 
-#================================================================
-# Turbulent channel flow
-#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-sub_directory="${base_directory}/turbulent_channel_flow"
-test_directory="${sub_directory}_local_test"
-walltime="96:00:00"
-poly_degree="3"
-number_of_grid_elements_per_dimension="16"
-final_time="70.0"
-nodes=1
-is_cpu_timing_run="false"
-#----------------------------------------------------------------
-cfl_number="0.1"
-large_scale_poly_degree_max="4"
-dynamic_smag_clipping_limit="0.01"
-source ./setup_run.sh ${sub_directory} "physics_model" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TCF" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "navier_stokes_model" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max} ${dynamic_smag_clipping_limit}
-#----------------------------------------------------------------
-#================================================================
-
 # #================================================================
-# # Scaling analysis for 96^3 DOF case
+# # Turbulent channel flow
 # #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-# sub_directory="${base_directory}/strong_scaling_p5_96_runs_for_averaging/strong_scaling_TGV_p5_96_run_10"
+# sub_directory="${base_directory}/turbulent_channel_flow"
 # test_directory="${sub_directory}_local_test"
-# walltime="1:00:00"
-# poly_degree="5"
+# walltime="96:00:00"
+# poly_degree="3"
 # number_of_grid_elements_per_dimension="16"
-# final_time="0.00001"
-# is_cpu_timing_run="scaling"
+# final_time="70.0"
+# nodes=1
+# is_cpu_timing_run="false"
 # #----------------------------------------------------------------
 # cfl_number="0.1"
-# large_scale_poly_degree_max="3"
+# large_scale_poly_degree_max="4"
 # dynamic_smag_clipping_limit="0.01"
-# #----------------------------------------------------------------
-# # poly degree min and max
-# NODESMIN=1
-# NODESMAX=32
-# for (( nodes=${NODESMIN}; nodes<=${NODESMAX}; nodes+=nodes )); do
-#     if [ ${nodes} == ${NODESMIN} ]; then
-#         # signal first run
-#         first_or_last_run="first"
-#     elif [ ${nodes} == ${NODESMAX} ]; then
-#         # signal first run
-#         first_or_last_run="last"
-#     else
-#         first_or_last_run="-"
-#     fi
-#     # Uncollocated - NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=P+1 (i.e. no over-integration)
-#     source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" ${first_or_last_run} ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max} ${dynamic_smag_clipping_limit}
-# done
+# source ./setup_run.sh ${sub_directory} "physics_model" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TCF" "first" ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "navier_stokes_model" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max} ${dynamic_smag_clipping_limit}
 # #----------------------------------------------------------------
 # #================================================================
+
+#================================================================
+# Scaling analysis for 96^3 DOF case
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+sub_directory="${base_directory}/balint_strong_scaling_study/strong_scaling_TGV_p5_96_run_01"
+test_directory="${sub_directory}_local_test"
+walltime="24:00:00"
+poly_degree="5"
+number_of_grid_elements_per_dimension="16"
+final_time="1.0000"
+is_cpu_timing_run="scaling"
+#----------------------------------------------------------------
+cfl_number="0.1"
+large_scale_poly_degree_max="3"
+dynamic_smag_clipping_limit="0.01"
+#----------------------------------------------------------------
+# poly degree min and max
+NODESMIN=1
+NODESMAX=16
+for (( nodes=${NODESMIN}; nodes<=${NODESMAX}; nodes+=nodes )); do
+    if [ ${nodes} == ${NODESMIN} ]; then
+        # signal first run
+        first_or_last_run="first"
+    elif [ ${nodes} == ${NODESMAX} ]; then
+        # signal first run
+        first_or_last_run="last"
+    else
+        first_or_last_run="-"
+    fi
+    # Uncollocated - NSFR cDG with IR two-point numerical flux, on GL flux nodes, n_quad=P+1 (i.e. no over-integration)
+    source ./setup_run.sh ${sub_directory} "navier_stokes" "SMAG" "cDG" "2PF" ${TP_FLUX_type} "TGV" ${first_or_last_run} ${test_directory} ${poly_degree} ${number_of_grid_elements_per_dimension} ${walltime} ${ntasks_per_node} ${nodes} ${memory_per_node} "false" "0" "GL" "0.10" "large_eddy_simulation" ${cfl_number} ${final_time} ${is_cpu_timing_run} ${large_scale_poly_degree_max} ${dynamic_smag_clipping_limit}
+done
+#----------------------------------------------------------------
+#================================================================
 
 # #================================================================
 # # Low Reynolds number corrected SGS models
